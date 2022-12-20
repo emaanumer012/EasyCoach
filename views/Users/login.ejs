@@ -1,0 +1,53 @@
+<% layout("layouts/boilerplate.ejs") %>
+<main class="m-3">
+  <h1>Login</h1>
+  <div class="m-5">
+    <form action="/login" method="POST" novalidate class="needs-validation">
+      <div>
+        <label class="form-label" for="username">Username : </label>
+        <input
+          class="form-control"
+          type="text"
+          id="username"
+          name="username"
+          placeholder="username"
+          required
+        />
+        <div class="valid-feedback">Looks good</div>
+      </div>
+
+      <div>
+        <label class="form-label" for="password">Password : </label>
+        <input
+          class="form-control"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="password"
+          required
+        />
+        <div class="valid-feedback">Looks good</div>
+      </div>
+
+
+      <div>
+      <label class="form-label" for="role">Role : </label>
+    
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Log in as</label>
+        </div>
+        <select class="custom-select form-select" id="inputGroupSelect01" name="role" >
+          <option selected value="Student">Student</option>
+          <option value="Employee">Employee</option>
+          <option value="Driver">Driver</option>
+          <option value="Administrator">Administrator</option>
+        </select>
+      </div>
+    </div>
+     
+    
+    <button class="btn btn-success">Login</button>
+    </form>
+  </div>
+</main>

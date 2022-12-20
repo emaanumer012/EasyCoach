@@ -1,0 +1,63 @@
+<% layout("layouts/boilerplate.ejs") %> <% for (let row of rows){ %>
+<div class="card mb-5" style="width: 18rem">
+  <div class="card-body">
+    <h5 class="card-title"><%=row.PlateNum%></h5>
+    <p class="card-text"><%=row.Color%></p>
+    <p class="card-text"><%=row.Model%></p>
+    <p class="card-text"><%=row.NumOfSeats%></p>
+  </div>
+</div>
+<% } %>
+
+<form action="/vehicle_register" id="vehicle_register" method="POST"  novalidate class="needs-validation">
+  <div>
+    <label class="form-label" for="plate_no">Plate No : </label>
+    <input
+      class="form-control"
+      type="text"
+      id="plate_no"
+      name="plate_no"
+      placeholder="Plate No"
+      required
+    />
+    <div class="valid-feedback">Looks good</div>
+  <div>
+    <label class="form-label" for="total_seats">No of Seats : </label>
+    <input
+      class="form-control"
+      type="number"
+      id="total_seats"
+      name="total_seats"
+      placeholder="Seats"
+      required
+    />
+    <div class="valid-feedback">Looks good</div>
+  </div>
+  <div>
+    <label class="form-label" for="email">Color : </label>
+    <input
+      class="form-control"
+      type="text"
+      id="color"
+      name="color"
+      placeholder="Color"
+      required
+    />
+    <div class="valid-feedback">Looks good</div>
+    <label class="form-label" for="email">Model : </label>
+    <input
+      class="form-control"
+      type="text"
+      id="model"
+      name="model"
+      placeholder="model"
+      required
+    />
+    <div class="valid-feedback">Looks good</div>
+  </div>
+
+
+  <button class="btn btn-success" type="submit" form="vehicle_register">
+    Register
+  </button>
+</form>
