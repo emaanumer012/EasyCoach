@@ -265,16 +265,6 @@
           <div class="card-body">
             <div class="table-responsive">
               <div class="table-wrapper">
-                <div class="table-title">
-                  <div class="row g-0">
-                    <div class="col-sm-4">
-                      <button type="button" class="btn btn-info add-new">
-                        <i class="fa fa-plus"></i> Add New
-                      </button>
-                    </div>
-                    
-                  </div>
-                </div>
                 <table class="table table-bordered col-lg-8">
                   <thead>
                     <tr>
@@ -284,9 +274,10 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <% for(let row of rows){ %> 
                     <tr>
-                      <td>Media Town</td>
-                      <td>10000</td>
+                      <td><%=row.DestName%> </td>
+                      <td><%=row.EquivDFare%> </td>
                       <td>
                         <a class="add" title="Add" data-toggle="tooltip">
                           <i class="material-icons">&#xE03B;</i>
@@ -298,21 +289,15 @@
                           <i class="material-icons">&#xE872;</i>
                         </a>
                       </td>
+                     
                     </tr>
+                    <% } %>
                     <tr>
-                      <td>F11</td>
-                      <td>5000</td>
-                      <td>
-                        <a class="add" title="Add" data-toggle="tooltip">
-                          <i class="material-icons">&#xE03B;</i>
-                        </a>
-                        <a class="edit" title="Edit" data-toggle="tooltip">
-                          <i class="material-icons">&#xE254;</i>
-                        </a>
-                        <a class="delete" title="Delete" data-toggle="tooltip">
-                          <i class="material-icons">&#xE872;</i>
-                        </a>
-                      </td>
+                      <form action="/routes/add" id="add_route_form" method="POST" novalidate class="needs-validation">
+                        <td><input class="form-control" type="text" name="destination_name" id="destination_name" placeholder="Destination Name" ></td>
+                        <td><input class="form-control" type="number" name="student_fare" id="student_fare" placeholder="Student Fare"></td>
+                        <td><button class="btn btn-success" type="submit" form="add_route_form">Add</button></td>
+                      </form>
                     </tr>
                   </tbody>
                 </table>

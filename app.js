@@ -83,12 +83,21 @@ app.get(
     res.render("Users/manageemployees.ejs");
   })
 );
-app.get(
-  "/manageroutes",
-  catchAsync((req, res) => {
-    res.render("Users/manageroutes.ejs");
+app.get("/routes/manage",catchAsync( async(req, res) => {
+  const [rows] = await con.execute( `select * from distancefare`);
+    res.render("Users/manageroutes.ejs",{rows});
   })
 );
+app.post("/routes/add",async(req,res)=>{
+  const sql_statement1 = `INSERT INTO distancefare VALUES ` +
+    `("${req.body.destination_name}", ${req.body.student_fare})`;
+    await con.execute(`SET FOREIGN_KEY_CHECKS=0`);
+    await con.execute(sql_statement1);
+    await con.execute(`SET FOREIGN_KEY_CHECKS=1`);
+    res.redirect("/routes/manage");
+   
+  
+})
 app.get(
   "/managevehicles",
   catchAsync((req, res) => {
@@ -97,9 +106,7 @@ app.get(
 );
 app.get("/profile", catchAsync(async (req, res) => {
     let cms_id = 352147;
-    const [rows] = await con.execute(
-      `select * from student where CmsID=${cms_id}`
-    );
+    const [rows] = await con.execute( `select * from student where CmsID=${cms_id}`);
     let info = rows[0];
     res.render("Users/profile.ejs", { info });
   }));
@@ -179,6 +186,7 @@ app.post("/student_register",catchAsync(async (req, res) => {
     res.redirect("/home");
   })
 );
+
 app.post("/employee_register",catchAsync(async (req, res, next) => {
     const hash = await bcrypt.hash(req.body.password, 12);
     const [rows1] = await con.execute("select max(EmpID) max_id from employee");
