@@ -23,8 +23,8 @@
       
   
     <div class="container">
-      <div class="row py-5 justify-content-center">
-          <div class="col-md-5 pr-lg-5 mb-5 mb-md-0 align-left">
+      <div class="row py-5 mt-4 justify-content-center">
+          <div class="col-md-5 pr-lg-5 mb-5 mb-md-0 align-top ">
               <img src="https://bootstrapious.com/i/snippets/sn-registeration/illustration.svg" alt="" class="img-fluid mb-3 d-none d-md-block">
               <h1>Register an Account</h1>
               </p>
@@ -44,192 +44,744 @@
                   <a href="#employee" id = "employee-tab" class="nav-link" data-toggle="tab" >Employee</a>
                 </li>
               </ul>
+  
+  
               <div class="tab-content">
                 <div class="tab-pane fade show active" id="student" role="tabpanel">
   
-                  <main class="m-5">
-                    <form action="/student_register" method="POST" name="student_register" id="student_register" novalidate class="needs-validation">
-                        <div>
-                          <label class="form-label" for="first_name">First Name : </label>
-                          <input class="form-control" type="text" id="first_name" name="first_name" placeholder="First Name"required/>
+                  <div class="col-md-7 col-lg-11 ml-auto" style="padding: 30px">
+                    <form action="/student/register" method="POST" name="student_register" id="student_register" novalidate class="needs-validation">
+                      <div class="row">
+                        <!-- First Name -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-user text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="first_name"
+                            type="text"
+                            name="first_name"
+                            placeholder="First Name"
+                            class="form-control bg-white border-left-0 border-md"
+                            required
+                          />
                           <div class="valid-feedback">Looks good</div>
                         </div>
-                        <div>
-                          <label class="form-label" for="last_name">Last Name : </label>
-                          <input class="form-control" type="text" id="last_name" name="last_name" placeholder="Last Name"required/>
+                  
+                        <!-- Last Name -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-user text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="last_name"
+                            type="text"
+                            name="last_name"
+                            placeholder="Last Name"
+                            class="form-control bg-white border-left-0 border-md"
+                            required
+                            />
+                            <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- CMS -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-key text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="cms"
+                            type="number"
+                            name="cms"
+                            placeholder="Cms ID"
+                            class="form-control bg-white border-left-0 border-md"
+                            required
+                            />
+                            <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Email Address -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-envelope text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="email"
+                            type="email"
+                            name="email"
+                            placeholder="Email Address"
+                            class="form-control bg-white border-left-0 border-md"
+                            required
+                            />
+                            <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Address -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-building text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="address"
+                            type="text"
+                            name="address"
+                            placeholder="Home Address"
+                            class="form-control bg-white border-left-0 border-md"
+                            required
+                            />
+                            <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Phone Number -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-phone-square text-muted"></i>
+                            </span>
+                          </div>
+                          <label
+                            id="countryCode"
+                            name="countryCode"
+                            style="max-width: 80px; max-height: 38px"
+                            class="form-control bg-white border-left-0 border-md h-100 font-weight-bold text-muted"
+                          >
+                            +92
+                          </label>
+                          <input
+                            id="phnumber"
+                            type="tel"
+                            name="phnumber"
+                            placeholder="Phone Number"
+                            class="form-control bg-white border-md border-left-0 pl-3"
+                            required
+                            />
+                            <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Department -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-black-tie text-muted"></i>
+                            </span>
+                          </div>
+                          <select
+                            id="department"
+                            name="department"
+                            class="form-control custom-select bg-white border-left-0 border-md"
+                            required
+                          >
+                            <option value="" disabled selected hidden>Choose your Department</option>
+                            <option value="SEECS">SEECS</option>
+                            <option value="SCME">SCME</option>
+                            <option value="IGIS">IGIS</option>
+                            <option value="NBS">NBS</option>
+                            <option value="S3H">S3H</option>
+                            <option value="SADA">SADA</option>
+                          </select>
                           <div class="valid-feedback">Looks good</div>
                         </div>
-                    
-                        <div>
-                          <label class="form-label" for="cms">CMS id : </label>
-                          <input class="form-control" type="number" id="cms" name="cms" placeholder="Cms Id" required/>
-                          <div class="valid-feedback">Looks good</div>
-                        </div>
-                        <div>
-                          <label class="form-label" for="phnumber">Phone No : </label>
-                          <input class="form-control" type="number" id="phnumber" name="phnumber" placeholder="Phone Number"required/>
-                          <div class="valid-feedback">Looks good</div>
-                        </div>
-                        
-                        <div>
-                            <label class="form-label" for="department">Department : </label>
-                    
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Department</label>
-                              </div>
-                            <select class="custom-select form-select" id="inputGroupSelect01"  name="department">
-                              <option selected value="seecs">Seecs</option>
-                              <option value="scme">Scme</option>
-                              <option value="nbs">Nbs</option>
-                              <option value="nice">Nice</option>
-                              <option value="s3h">S3h</option>
-                              <option value="smme">Smme</option>
-                            </select>
+                  
+                        <!--Starting Date-->
+                        <div class="row mb-4">
+                          <label for="inputDate" class="col-lg-4 col-form-label text-muted"
+                            >Starting Date</label
+                          >
+                          <div class="col-lg-8">
+                            <input
+                              type="date"
+                              name="starting_date"
+                              id="starting_date"
+                              class="form-control bg-white border-left-1 border-right-1 border-md"
+                              required
+                              />
+                              <div class="valid-feedback">Looks good</div>
                           </div>
                         </div>
-                    
-                    
-                        <div>
-                          <label class="form-label" for="address">Address : </label>
-                          <input class="form-control" type="text" id="address" name="address" placeholder="Address" required/>
+                  
+                        <!-- Dest Name -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-bus text-muted"></i>
+                            </span>
+                          </div>
+                          <select
+                            id="dest_name_student"
+                            name="dest_name"
+                            class="form-control custom-select bg-white border-left-0 border-md select_dest"
+                            required>
+                            <option value="" selected hidden disabled>Choose your Destination</option>
+                            <% for(let destination of destinations){ %> 
+                            <option value="<%=destination.DestName%>"><%=destination.DestName%></option>
+                             <% } %> 
+                          </select>
                           <div class="valid-feedback">Looks good</div>
                         </div>
-                        <div>
-                          <label class="form-label" for="email">Email : </label>
-                          <input class="form-control" type="email" id="email" name="email" placeholder="Email" required/>
-                          <div class="valid-feedback">Looks good</div>
+                  
+                        <!--Timings-->
+                        <div class="col-lg-12 mb-3">
+                          <label
+                            id="timings"
+                            name="shiftimings"
+                            style="max-width: 90px; max-height: 38px"
+                            class="form-control font-weight-bold text-muted d-inline"
+                          >
+                            Timings</label
+                          >
+                          <select
+                            id="timings_student"
+                            name="timings"
+                            class="form-control custom-select bg-white border-left-0 border-md d-inline select_timing"
+                            required>
+                            <option value=""selected hidden disabled>Available Options</option>
+                          </select>
+                          </div>
+                        
+                  
+                        <!-- Password -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-lock text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            class="form-control bg-white border-left-0 border-md"
+                            required
+                            />
+                            <div class="valid-feedback">Looks good</div>
                         </div>
-                    
-                        <div>
-                          <label class="form-label" for="driver_id">Driver ID : </label>
-                          <input class="form-control" type="number" id="driver_id" name="driver_id" placeholder="Driver ID"required/>
-                          <div class="valid-feedback">Looks good</div>
+                  
+                        
+                  
+                        <!-- Submit Button -->
+                        <div class="form-group col-lg-12 mx-auto mb-0">
+                          <button class="btn btn-primary btn-block py-2 font-weight-bold" form="student_register" type="submit">Register</button>
                         </div>
-                    
-                        <div>
-                          <label class="form-label" for="password">Password : </label>
-                          <input class="form-control" type="password" id="password" name="password" placeholder="Password"required />
-                          <div class="valid-feedback">Looks good</div>
-                        </div>
-                        <button class="btn btn-success" form="student_register" type="submit">Register</button>
-                      </form>
-                  </main>
-  
+                      </div>
+                    </form>
+                  </div>
   
                 </div>
+  
                 <div class="tab-pane fade" id="driver" role="tabpanel">
-
-                    <main class="m-5">
-                        <form action="/driver_register" id="driver_register" name="driver_register" method="POST" novalidate class="needs-validation">
-                            <div>
-                              <label class="form-label" for="first_name">First Name : </label>
-                              <input class="form-control" type="text" id="first_name" name="first_name" placeholder="First Name"required/>
-                              <div class="valid-feedback">Looks good</div>
+  
+                  <div class="col-md-7 col-lg-11 ml-auto" style="padding: 30px">
+                    <form action="/driver_register" id="driver_register" name="driver_register" method="POST" novalidate class="needs-validation">
+                      <div class="row">
+                        <!-- First Name -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-user text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="first_name"
+                            type="text"
+                            name="first_name"
+                            placeholder="First Name"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Last Name -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-user text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="last_name"
+                            type="text"
+                            name="last_name"
+                            placeholder="Last Name"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- CNIC -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-id-card text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="cnic"
+                            type="text"
+                            name="cnic"
+                            placeholder="CNIC"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Email Address -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-envelope text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="email"
+                            type="email"
+                            name="email"
+                            placeholder="Email Address"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Address -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-building text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="address"
+                            type="text"
+                            name="address"
+                            placeholder="Home Address"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Phone Number -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-phone-square text-muted"></i>
+                            </span>
+                          </div>
+                          <label
+                            id="countryCode"
+                            name="countryCode"
+                            style="max-width: 80px; max-height: 38px"
+                            class="form-control bg-white border-left-0 border-md h-100 font-weight-bold text-muted"
+                          >
+                            +92
+                          </label>
+                          <input
+                            id="phnumber"
+                            type="tel"
+                            name="phnumber"
+                            placeholder="Phone Number"
+                            class="form-control bg-white border-md border-left-0 pl-3"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!--Starting Date-->
+                        <div class="row mb-4">
+                          <label for="inputDate" class="col-lg-4 col-form-label text-muted"
+                            >Starting Date</label
+                          >
+                          <div class="col-lg-8">
+                            <input
+                              id="date"
+                              name="date"
+                              type="date"
+                              class="form-control bg-white border-left-1 border-right-1 border-md"
+                            />
+                            <div class="valid-feedback">Looks good</div>
+                          </div>
+                        </div>
+                  
+                        <!-- Dest Name -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-bus text-muted"></i>
+                            </span>
+                          </div>
+                          <select
+                            id="dest_name"
+                            name="dest_name"
+                            class="form-control custom-select bg-white border-left-0 border-md"
+                          >
+                            <option value="text-muted">Choose your Route</option>
+                            <option value="Bahria Town">Bahria Town</option>
+                            <option value="F11">F11</option>
+                            <option value="Gulberg Greens">Gulberg Greens</option>
+                            <option value="Madia Town">Media Town</option>
+                            <option value="Chakalala Scheme 3">Chaklala Scheme 3</option>
+                          </select>
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!--Timings-->
+                        <div class="col-lg-12 mb-2">
+                          <label
+                            id="timings"
+                            name="shiftimings"
+                            style="max-width: 90px; max-height: 38px"
+                            class="form-control font-weight-bold text-muted"
+                          >
+                            Timings</label
+                          >
+                          <div class="input-group col-lg-12 mb-4 d-inline-block">
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="exampleRadios"
+                                id="ninefive"
+                                value="option1"
+                                checked
+                              />
+                              <label
+                                class="form-check-label text-muted"
+                                style="max-width: 110px"
+                                for="ninefivelabel"
+                                >9 am - 5 pm</label
+                              >
                             </div>
-                            <div>
-                              <label class="form-label" for="last_name">Last Name : </label>
-                              <input class="form-control" type="text" id="last_name" name="last_name" placeholder="Last Name"required/>
-                              <div class="valid-feedback">Looks good</div>
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="exampleRadios"
+                                id="onefive"
+                                value="option2"
+                              />
+                              <label class="form-check-label text-muted" for="onefivelabel"
+                                >1 pm - 5 pm</label
+                              >
                             </div>
-                        
-                            <div>
-                              <label class="form-label" for="phnumber">Phone No : </label>
-                              <input class="form-control" type="number" id="phnumber" name="phnumber" placeholder="Phone Number"required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                            <div>
-                              <label class="form-label" for="cnic">CNIC  : </label>
-                              <input class="form-control" type="number" id="cnic" name="cnic" placeholder="CNIC"required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                            <div>
-                              <label class="form-label" for="email">Email : </label>
-                              <input class="form-control" type="email" id="email" name="email" placeholder="Email" required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                            <div>
-                              <label class="form-label" for="plate_no">Plate No : </label>
-                              <input class="form-control" type="text" id="plate_no" name="plate_no" placeholder="Plate No" required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                            <div>
-                              <label class="form-label" for="route_id">Route ID : </label>
-                              <input class="form-control" type="text" id="route_id" name="route_id" placeholder="Route ID" required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                        
-                            <div>
-                              <label class="form-label" for="password">Password : </label>
-                              <input class="form-control" type="password" id="password" name="password" placeholder="Password"required />
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                        
-                            <button class="btn btn-success" form="driver_register">Register</button>
-                          </form>
-                      </main>
-      
-
-                </div>
-                <div class="tab-pane fade" id="employee" role="tabpanel">
-
-                    <main class="m-5">
-                        <form action="/employee_register" id="employee_register" method="POST" novalidate class="needs-validation">
-                            <div>
-                              <label class="form-label" for="first_name">First Name : </label>
-                              <input class="form-control" type="text" id="first_name" name="first_name" placeholder="First Name"required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                            <div>
-                              <label class="form-label" for="last_name">Last Name : </label>
-                              <input class="form-control" type="text" id="last_name" name="last_name" placeholder="Last Name"required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                        
-                            <div>
-                              <label class="form-label" for="phnumber">Phone No : </label>
-                              <input class="form-control" type="number" id="phnumber" name="phnumber" placeholder="Phone Number"required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                            <div>
-                              <label class="form-label" for="email">Email : </label>
-                              <input class="form-control" type="email" id="email" name="email" placeholder="Email" required/>
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                        
-                            <div>
-                              <label class="form-label" for="position">Registering For : </label>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="position">Position</label>
-                                </div>
-                                <select class="custom-select form-select" id="position" name="position">
-                                  <option selected value="driver">Driver</option>
-                                  <option value="manager">Manager</option>
-                                  <option value="Human Resources">Human Resources</option>
-                                  <option value="Accountant">Accountant</option>
-                                  <option value="Superviser">Superviser</option>
-                                </select>
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="exampleRadios"
+                                id="onenine"
+                                value="option3"
+                              />
+                              <label class="form-check-label text-muted" for="onefive"
+                                >1 pm - 9 pm</label
+                              >
                             </div>
                           </div>
-                        
-                            <div>
-                              <label class="form-label" for="password">Password : </label>
-                              <input class="form-control" type="password" id="password" name="password" placeholder="Password"required />
-                              <div class="valid-feedback">Looks good</div>
-                            </div>
-                        
-                            <button class="btn btn-success" type="submit" form="employee_register">Register</button>
-                            
-                          </form>
-                      </main>
-      
-
+                        </div>
+                  
+                        <!--vehicle designation-->
+                        <div class="row mb-4">
+                          <label
+                            class="col-lg-6 col-form-label text-muted bg-white border-left-0 border-md"
+                            >Designate Vehicle</label
+                          >
+                          <div class="col-sm-18">
+                            <select
+                              class="form-select"
+                              multiple
+                              aria-label="multiple select example"
+                            >
+                              <option selected>Plate Number, Model, Number of seats</option>
+                              <option value="1" class="text-muted">
+                                C-1728, HIACE, 11 Seats
+                              </option>
+                              <option value="2" class="text-muted">Two</option>
+                              <option value="3" class="text-muted">Three</option>
+                            </select>
+                            <div class="valid-feedback">Looks good</div>
+                          </div>
+                        </div>
+                  
+                        <!-- Password -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-lock text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Password Confirmation -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-lock text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="password_confirmation"
+                            type="password"
+                            name="password_confirmation"
+                            placeholder="Confirm Password"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Submit Button -->
+                        <div class="form-group col-lg-12 mx-auto mb-0">
+                          <button class="btn btn-primary btn-block py-2 font-weight-bold" type="submit" form="driver_register">Register</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+  
+                  
                 </div>
+  
+                <div class="tab-pane fade" id="employee" role="tabpanel">
+  
+                  <div class="col-md-7 col-lg-11 ml-auto" style="padding: 30px">
+                    <form action="/employee_register" id="employee_register" method="POST" novalidate class="needs-validation">
+                      <div class="row">
+                        <!-- First Name -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-user text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="first_name"
+                            type="text"
+                            name="first_name"
+                            placeholder="First Name"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Last Name -->
+                        <div class="input-group col-lg-6 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-user text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="last_name"
+                            type="text"
+                            name="last_name"
+                            placeholder="Last Name"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- CNIC -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-id-card text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="cnic"
+                            type="text"
+                            name="cnic"
+                            placeholder="CNIC"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Email Address -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-envelope text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="email"
+                            type="email"
+                            name="email"
+                            placeholder="Email Address"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Address -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-building text-muted"></i
+                            ></span>
+                          </div>
+                          <input
+                            id="address"
+                            type="text"
+                            name="address"
+                            placeholder="Home Address"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Phone Number -->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-phone-square text-muted"></i>
+                            </span>
+                          </div>
+                          <label
+                            id="countryCode"
+                            name="countryCode"
+                            style="max-width: 80px; max-height: 38px"
+                            class="form-control bg-white border-left-0 border-md h-100 font-weight-bold text-muted"
+                          >
+                            +92
+                          </label>
+                          <input
+                            id="phnumber"
+                            type="tel"
+                            name="phnumber"
+                            placeholder="Phone Number"
+                            class="form-control bg-white border-md border-left-0 pl-3"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!--Starting Date-->
+                        <div class="row mb-4">
+                          <label for="inputDate" class="col-lg-4 col-form-label text-muted"
+                            >Hire Date</label
+                          >
+                          <div class="col-lg-8">
+                            <input
+                              id="date"
+                              name="date"
+                              type="date"
+                              class="form-control bg-white border-left-1 border-right-1 border-md"
+                            />
+                            <div class="valid-feedback">Looks good</div>
+                          </div>
+                        </div>
+                  
+                        <!--Job Name-->
+                        <div class="input-group col-lg-12 mb-4">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-bus text-muted"></i>
+                            </span>
+                          </div>
+                          <select
+                            id="job_name"
+                            name="job_name"
+                            class="form-control custom-select bg-white border-left-1 border-md"
+                          >
+                            <option value="" hidden disabled selected>Job Name</option>
+                            <option value="Accountant">Accountant</option>
+                            <option value="">Human Resources</option>
+                            <option value="">Superviser</option>
+                            <option value="">Manager</option>
+                            <option value="">Customer Support</option>
+                          </select>
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Password -->
+                        <div class="input-group col-lg-6 mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-lock text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Password Confirmation -->
+                        <div class="input-group col-lg-6 mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <i class="fa fa-lock text-muted"></i>
+                            </span>
+                          </div>
+                          <input
+                            id="passwordConfirmation"
+                            type="password"
+                            name="passwordConfirmation"
+                            placeholder="Confirm Password"
+                            class="form-control bg-white border-left-0 border-md"
+                          />
+                          <div class="valid-feedback">Looks good</div>
+                        </div>
+                  
+                        <!-- Submit Button -->
+                        <div class="form-group col-lg-12 mx-auto mb-0">
+                          <button class="btn btn-primary btn-block py-2 font-weight-bold" type="submit" form="employee_register">Register</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+    
+                </div>
+              
               </div>
-          
+  
+  
             </div>
           </div>
+        
       </div>
     </div>
- 
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/js/front_js.js" ></script>
+
+
+    <script >
+      $(document).ready(function() {
+          $('#dest_name_student').on('change', function() {
+               var dest_name = this.value;
+               console.log(dest_name)
+               $("#timings_student").html('');
+               $.ajax({
+                  url: "http://localhost:3000/student/register/get_timings",
+                  type: "POST",
+                  data: {dest_name},
+                  dataType: 'json',
+                  success: function(result) {
+                      console.log("inside success")
+                      $('#timings_student').html('<option value="" selected hidden disabled>Available Options</option>');
+                      for(let timing of result.timings[0]){
+                        console.log(timing)
+                        $("#timings_student").append(`<option value="${timing.ShiftTime}">${timing.ShiftTime}</option>`);
+                      }
+                      }});});}); 
+      </script>

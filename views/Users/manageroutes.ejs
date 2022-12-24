@@ -195,60 +195,117 @@
                   <div class="col-sm-8">
                     <h2>Route <b>Details</b></h2>
                   </div>
-                  <div class="col-sm-4">
-                    <button type="button" class="btn btn-info add-new">
-                      <i class="fa fa-plus"></i> Add New
-                    </button>
-                  </div>
                 </div>
               </div>
               <table class="table table-bordered">
                 <thead>
                   <tr>
                     <th>Route ID</th>
-                    <th>Station 1</th>
-                    <th>Station 2</th>
-                    <th>Station 3</th>
+                    <th>Station</th>
+                    <th>Station</th>
+                    <th>Station</th>
                     <th>Timings</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <% for (let route_id of route_ids){ %>
                   <tr>
-                    <td>RU1</td>
-                    <td>F11</td>
-                    <td>Korral Chowk</td>
-                    <td>Pakistan Town</td>
-                    <td>9 - 5</td>
+                    <td><%=route_id.RouteID%></td>
+                    <td><%=destination_array.shift()%></td>
+                    <td><%=destination_array.shift()%></td>
+                    <td><%=destination_array.shift()%></td>
+                    <td><%=route_id.ShiftTime%></td>
                     <td>
-                      <a class="add" title="Add" data-toggle="tooltip">
-                        <i class="material-icons">&#xE03B;</i>
-                      </a>
-                      <a class="edit" title="Edit" data-toggle="tooltip">
-                        <i class="material-icons">&#xE254;</i>
-                      </a>
-                      <a class="delete" title="Delete" data-toggle="tooltip">
-                        <i class="material-icons">&#xE872;</i>
-                      </a>
+                    <form
+                      id="delete_route_<%=route_id.RouteID%>_form"
+                      action="/routes/<%=route_id.RouteID%>?_method=DELETE"
+                      method="POST">
+                        <a
+                          onclick="document.getElementById('delete_route_<%=route_id.RouteID%>_form').submit();">
+                          <i class="material-icons">&#xE872;</i>
+                        </a>
+                      </form>
                     </td>
                   </tr>
+                  <% } %>
                   <tr>
-                    <td>RU2</td>
-                    <td>Golra Chowk</td>
-                    <td>Chaklala Scheme 3</td>
-                    <td>DHA</td>
-                    <td>1 - 5</td>
-                    <td>
-                      <a class="add" title="Add" data-toggle="tooltip">
-                        <i class="material-icons">&#xE03B;</i>
-                      </a>
-                      <a class="edit" title="Edit" data-toggle="tooltip">
-                        <i class="material-icons">&#xE254;</i>
-                      </a>
-                      <a class="delete" title="Delete" data-toggle="tooltip">
-                        <i class="material-icons">&#xE872;</i>
-                      </a>
-                    </td>
+                    <form
+                      action="/routes/add/details"
+                      id="add_route_details_form"
+                      method="POST"
+                      novalidate
+                      class="needs-validation"
+                    >
+                      <td>
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="route_id"
+                          id="route_id"
+                          required
+                          placeholder="Route Id"
+                        />
+                      </td>
+                      <td>
+                        <select
+                          class="custom-select form-select"
+                          id="station_1"
+                          name="station_1"
+                        >
+                          <% for(let destination of destination_list){ %>
+                          <option value="<%=destination.DestName%>">
+                            <%=destination.DestName%>
+                          </option>
+                          <% } %>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          class="custom-select form-select"
+                          id="station_2"
+                          name="station_2"
+                        >
+                          <% for(let destination of destination_list){ %>
+                          <option value="<%=destination.DestName%>">
+                            <%=destination.DestName%>
+                          </option>
+                          <% } %>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          class="custom-select form-select"
+                          id="station_3"
+                          name="station_3"
+                        >
+                          <% for(let destination of destination_list){ %>
+                          <option value="<%=destination.DestName%>">
+                            <%=destination.DestName%>
+                          </option>
+                          <% } %>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          class="custom-select form-select"
+                          id="time"
+                          name="time"
+                        >
+                          <option selected value="9-5">9-5</option>
+                          <option value="1-5">1-5</option>
+                        </select>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-success"
+                          type="submit"
+                          form="add_route_details_form"
+                        >
+                          Add
+                        </button>
+                      </td>
+                    </form>
                   </tr>
                 </tbody>
               </table>
@@ -274,29 +331,64 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% for(let row of rows){ %> 
+                    <% for(let destination of destination_list){ %>
                     <tr>
-                      <td><%=row.DestName%> </td>
-                      <td><%=row.EquivDFare%> </td>
+                      <td><%=destination.DestName%></td>
+                      <td><%=destination.EquivDFare%></td>
                       <td>
-                        <a class="add" title="Add" data-toggle="tooltip">
-                          <i class="material-icons">&#xE03B;</i>
-                        </a>
-                        <a class="edit" title="Edit" data-toggle="tooltip">
+                        <a href="/routes/destination/<%=destination.DestName%>/edit_destinations">
                           <i class="material-icons">&#xE254;</i>
                         </a>
-                        <a class="delete" title="Delete" data-toggle="tooltip">
-                          <i class="material-icons">&#xE872;</i>
-                        </a>
-                      </td>
-                     
+                      <form
+                        id="delete_destination_<%=destination.DestName%>_form"
+                        action="/routes/destination/<%=destination.DestName%>?_method=DELETE"
+                        method="POST">
+                          <a
+                            onclick="document.getElementById('delete_destination_<%=destination.DestName%>_form').submit();">
+                            <i class="material-icons">&#xE872;</i>
+                          </a>
+                        </form>
+                        </td>
+                      
                     </tr>
                     <% } %>
                     <tr>
-                      <form action="/routes/add" id="add_route_form" method="POST" novalidate class="needs-validation">
-                        <td><input class="form-control" type="text" name="destination_name" id="destination_name" placeholder="Destination Name" ></td>
-                        <td><input class="form-control" type="number" name="student_fare" id="student_fare" placeholder="Student Fare"></td>
-                        <td><button class="btn btn-success" type="submit" form="add_route_form">Add</button></td>
+                      <form
+                        action="/routes/add/destinations"
+                        id="add_destination_form"
+                        method="POST"
+                        novalidate
+                        class="needs-validation"
+                      >
+                        <td>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="destination_name"
+                            id="destination_name"
+                            required
+                            placeholder="Destination Name"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            class="form-control"
+                            type="number"
+                            name="student_fare"
+                            id="student_fare"
+                            required
+                            placeholder="Student Fare"
+                          />
+                        </td>
+                        <td>
+                          <button
+                            class="btn btn-success"
+                            type="submit"
+                            form="add_destination_form"
+                          >
+                            Add
+                          </button>
+                        </td>
                       </form>
                     </tr>
                   </tbody>
