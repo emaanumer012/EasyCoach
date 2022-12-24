@@ -19,7 +19,7 @@ const connect = async function () {
     host: "localhost",
     user: "root",
     password: "308NegraAroyoLane",
-    database: "project",
+    database: "transport",
     insecureAuth: true,
   });
 };
@@ -53,6 +53,7 @@ app.use((req, res, next) => {
   next();
 });
 
+//Home Page
 app.get("/", (req, res) => {
   res.render("Home.ejs");
 });
@@ -62,34 +63,18 @@ app.get(
     res.render("Home.ejs");
   })
 );
-app.get(
-  "/managestudents",
-  catchAsync((req, res) => {
-    res.render("Users/managestudents.ejs");
-  })
-);
-app.get(
-  "/managedrivers",
-  catchAsync((req, res) => {
-    res.render("Users/managedrivers.ejs");
-  })
-);
-app.get(
-  "/manageemployees",
-  catchAsync((req, res) => {
-    res.render("Users/manageemployees.ejs");
-  })
-);
+
+//Manage Routes
 app.get(
   "/routes/manage",
   catchAsync(async (req, res) => {
-    const [rows] = await con.execute(`select * from distancefare`);
+    const [rows] = await con.execute(`select * from destinations`);
     res.render("Users/manageroutes.ejs", { rows });
   })
 );
 app.post("/routes/add", async (req, res) => {
   const sql_statement1 =
-    `INSERT INTO distancefare VALUES ` +
+    `INSERT INTO destinations VALUES ` +
     `("${req.body.destination_name}", ${req.body.student_fare})`;
   await con.execute(`SET FOREIGN_KEY_CHECKS=0`);
   await con.execute(sql_statement1);
@@ -102,6 +87,8 @@ app.get(
     res.render("Users/managevehicles.ejs");
   })
 );
+
+//Profile
 app.get(
   "/profile",
   catchAsync(async (req, res) => {
@@ -113,15 +100,133 @@ app.get(
     res.render("Users/profile.ejs", { info });
   })
 );
+//Manage link clicked from a row to a profile
+app.get(
+  "/adminsideprof",
+  catchAsync(async (req, res) => {
+    let cms_id = 352147;
+    const [rows] = await con.execute(
+      `select * from student where CmsID=${cms_id}`
+    );
+    let info = rows[0];
+    res.render("Users/adminsideprof.ejs", { info });
+  })
+);
+
+//Manage Students
 app.get(
   "/managestudents",
   catchAsync(async (req, res) => {
     const [rows] = await con.query(
-      `select FirstName,LastName,Email,CmsID,Phone,DestName, DriverID, Enddate from students`
+      `select FirstName,LastName,Email,CmsID,Phone,DestName, DriverID, Enddate from student`
     );
     res.render("Users/managestudents.ejs", { rows });
   })
 );
+app.get(
+  "/searchstudents",
+  catchAsync(async (req, res) => {
+    var searchdata = req.query.searchdata;
+    var sql =
+      "select * from student WHERE FirstName LIKE '%" +
+      searchdata +
+      "%' OR LastName LIKE '%" +
+      searchdata +
+      "%' OR Email LIKE '%" +
+      searchdata +
+      "%' OR CmsID LIKE '%" +
+      searchdata +
+      "%' OR Phone LIKE'%" +
+      searchdata +
+      "%' OR DestName LIKE '%" +
+      searchdata +
+      "%' OR DriverID LIKE '%" +
+      searchdata +
+      "%' OR Enddate LIKE '%" +
+      searchdata +
+      "%'";
+    const [rows] = await con.query(sql);
+    res.render("Users/managestudents.ejs", { rows });
+  })
+);
+
+//Manage Drivers
+app.get(
+  "/managedrivers",
+  catchAsync(async (req, res) => {
+    const [rows] = await con.query(
+      `select DriverID,FirstName,LastName,Email,CNIC,Phone,vehicleno,RouteID,EndDate from driver`
+    );
+    res.render("Users/managedrivers.ejs", { rows });
+  })
+);
+app.get(
+  "/searchdrivers",
+  catchAsync(async (req, res) => {
+    var searchdata = req.query.searchdata;
+    var sql =
+      "select * from driver WHERE FirstName LIKE '%" +
+      searchdata +
+      "%' OR LastName LIKE '%" +
+      searchdata +
+      "%' OR Email LIKE '%" +
+      searchdata +
+      "%' OR CNIC LIKE '%" +
+      searchdata +
+      "%' OR Phone LIKE'%" +
+      searchdata +
+      "%' OR RouteID LIKE '%" +
+      searchdata +
+      "%' OR vehicleno LIKE '%" +
+      searchdata +
+      "%' OR EndDate LIKE '%" +
+      searchdata +
+      "%' OR DiverID LIKE '%" +
+      searchdata +
+      "%'";
+    const [rows] = await con.query(sql);
+    res.render("Users/managedrivers.ejs", { rows });
+  })
+);
+
+//Manage Employees
+app.get(
+  "/manageemployees",
+  catchAsync(async (req, res) => {
+    const [rows] = await con.query(
+      `select EmpID,FirstName,LastName,Email,CNIC,Phone,JobName,endDate from employee`
+    );
+    res.render("Users/manageemployees.ejs", { rows });
+  })
+);
+app.get(
+  "/searchemployees",
+  catchAsync(async (req, res) => {
+    var searchdata = req.query.searchdata;
+    var sql =
+      "select * from employee WHERE FirstName LIKE '%" +
+      searchdata +
+      "%' OR LastName LIKE '%" +
+      searchdata +
+      "%' OR EmpID LIKE '%" +
+      searchdata +
+      "%' OR Email LIKE '%" +
+      searchdata +
+      "%' OR CNIC LIKE '%" +
+      searchdata +
+      "%' OR Phone LIKE'%" +
+      searchdata +
+      "%' OR JobName LIKE '%" +
+      searchdata +
+      "%' OR endDate LIKE '%" +
+      searchdata +
+      "%'";
+    const [rows] = await con.query(sql);
+    res.render("Users/manageemployees.ejs", { rows });
+  })
+);
+
+//Logout Login
 app.get("/logout", (req, res) => {
   req.session.__id = null;
   req.flash("success", "Logged Out Successfully");
@@ -152,6 +257,8 @@ app.post(
     }
   })
 );
+
+//Register
 
 app.get("/register", isLoggedIn, isAdmin, (req, res) => {
   res.render("Users/register.ejs");
