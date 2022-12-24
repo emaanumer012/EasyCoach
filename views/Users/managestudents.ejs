@@ -5,6 +5,14 @@
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
 </head>
 
+<!--const rows = document.querySelectorAll("tr");
+
+rows.forEach((row) => {
+  row.addEventListener("click", () => {
+    row.classList.toggle("selected");
+  });
+});-->
+
 <body>
   <div
     class="card"
@@ -48,23 +56,30 @@
               <th scope="col">Cms ID</th>
               <th scope="col">Contact Number</th>
               <th scope="col">Destination Name</th>
-              <th scope="col">Vehicle</th>
+              <th scope="col">Driver ID</th>
               <th scope="col" class="text-center">Status</th>
             </tr>
           </thead>
           <tbody>
+            <% rows.forEach(row => { %>
             <tr>
-              <th scope="row">1</th>
-              <td class="text-truncate" style="max-width: 200px">Emaan Umer</td>
+              <th scope="rownum">1</th>
               <td class="text-truncate" style="max-width: 200px">
-                emaanumer012@gmail.com
+                <%=row.FirstName%><%=row.LastName%>
               </td>
-              <td>371551</td>
-              <td>03365222449</td>
-              <td>Media Town</td>
-              <td>C-1728</td>
-              <td class="text-center">Active</td>
+              <td class="text-truncate" style="max-width: 200px">
+                <%=row.Email%>
+              </td>
+              <td><%=row.CmsID%></td>
+              <td><%=row.Phone%></td>
+              <td><%=row.DestName%></td>
+              <td><%=row.DriverID%></td>
+              <td class="text-center">
+                <% if (row.Enddate){ %> <%=Active%> <% } else { %> <%=Inactive%>
+                <% } %>
+              </td>
             </tr>
+            <% }) %>
           </tbody>
         </table>
       </div>
