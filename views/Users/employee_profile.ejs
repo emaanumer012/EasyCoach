@@ -28,8 +28,9 @@
                 />
               </svg>
               <div class="mt-3">
-                <h4><%=row.FirstName%><%=" "%><%=row.LastName%></h4>
-                <p class="text-secondary mb-1"><%=row.JobName%></p>
+                <h4><%=Employee.FirstName%> <%=Employee.LastName%></h4>
+                <p class="text-secondary mb-1"><%=Employee.JobName%></p>
+                
                 <input
                   class="form-control form-control-sm"
                   id="formFileSm"
@@ -76,7 +77,7 @@
           <div class="tab-content">
             <div
               class="tab-pane fade show active"
-              id="profdetails"
+              id="personaldetails"
               role="tabpanel"
             >
               <div class="col-md-12 mt-4">
@@ -84,77 +85,50 @@
                   <div class="col-sm-3">
                     <h6 class="mb-0">Full Name</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
-                    <%=row.FirstName%><%=" "%><%=row.LastName%>
-                  </div>
+    
+                  <div class="col-sm-9 text-secondary"><%=Employee.FirstName%> <%=Employee.LastName%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <h6 class="mb-0">Employee ID</h6>
+                    <h6 class="mb-0">Driver ID</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.EmpID%></div>
+                  <div class="col-sm-9 text-secondary"><%=Employee.EmpID%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Email</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.Email%></div>
+                  <div class="col-sm-9 text-secondary">
+                    <%=Employee.Email%>
+                  </div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Contact</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.Phone%></div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">CNIC</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary"><%=row.CNIC%></div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Hire Date</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary"><%=row.HireDate%></div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">End Date</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary"><%=row.endDate%></div>
+                  <div class="col-sm-9 text-secondary"><%=Employee.Phone%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Address</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.Address%></div>
+                  <div class="col-sm-9 text-secondary"><%=Employee.Address%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <h6 class="mb-0">Daily Hour Rate</h6>
+                    <h6 class="mb-0">Salary</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">9-5</div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Fee/month</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">10000</div>
+                  <div class="col-sm-9 text-secondary"><%=Emp_details.SalaryAmount%> </div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-12">
-                    <a class="btn btn-info" target="__blank" href=""
+                    <a class="btn btn-info" target="__blank" href="/user/profile"
                       >Edit Profile</a
                     >
                     <a class="btn btn-info" target="__blank" href="/home"

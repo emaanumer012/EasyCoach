@@ -11,10 +11,7 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Varela+Round"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
 
     <link
       href="../../bootstrap/css/bootstrap.min.css"
@@ -23,14 +20,17 @@
     />
   </head>
 
-  <body style="background: whitesmoke">
+  <body
+
+    style="background: linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c)">
     <div class="d-flex flex-column">
       <div><%-include("../partials/navbar.ejs")%></div>
       <div><%-include("../partials/flash.ejs")%></div>
       <div><%-body%></div>
       <div><%-include("../partials/footer.ejs")%></div>
     </div>
-
+    
+   
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -43,6 +43,7 @@
     ></script>
 
     <script src="/js/validateForm.js"></script>
-    <script src="/js/front_js.js"></script>
+    <script src="/js/front_js.js" ></script>
+    
   </body>
 </html>

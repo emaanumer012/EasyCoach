@@ -1,0 +1,75 @@
+<% layout("layouts/boilerplate.ejs") %>
+<head>
+  <style>
+    .pt-3-half {
+      padding-top: 1.4rem;
+    }
+  </style>
+</head>
+
+<div
+  class="card mx-5 mb-5 mt-4"
+  style="width: 80rem; background: linear-gradient(#e66465, #9198e5)"
+>
+<div class="card">
+    <h3 class="card-header text-center font-weight-bold text-uppercase py-4">
+      Requests Table:
+    </h3>
+    <div class="card-body">
+      <div id="table" class="table-editable">
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <td><strong>Session: 2022 / 2023</strong></td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <table
+          class="table table-bordered table-responsive-md table-striped text-center"
+        >
+          <tr>
+            <th class="text-center">#</th>
+            <th class="text-center">User Role</th>
+            <th class="text-center">User ID</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Request Date</th>
+            <th class="text-center">Information</th>
+            <th class="text-center">Action</th>
+          </tr>
+          <tr>
+            <td class="pt-3-half" contenteditable="true">1</td>
+            <td class="pt-3-half" contenteditable="true">Driver</td>
+            <td class="pt-3-half" contenteditable="true">2</td>
+            <td class="pt-3-half" contenteditable="true">Ahmed Ayaz</td>
+            <td class="pt-3-half" contenteditable="true">01/01/2001</td>
+            <td class="pt-3-half" contenteditable="true">Leave chahiye pls</td>
+            <td>
+              <span class="table-remove"
+                ><button
+                  type="button"
+                  class="btn btn-danger btn-rounded btn-sm my-0"
+                >
+                  Reject
+                </button></span
+              >
+              <span class="table-remove"
+                ><button
+                  type="button"
+                  class="btn btn-primary btn-rounded btn-sm my-0"
+                >
+                  Approve
+                </button></span
+              >
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<!-- Editable table -->

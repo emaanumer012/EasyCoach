@@ -231,7 +231,7 @@
                   <% } %>
                   <tr>
                     <form
-                      action="/routes/add/details"
+                      action="/routes/new"
                       id="add_route_details_form"
                       method="POST"
                       novalidate
@@ -294,6 +294,7 @@
                         >
                           <option selected value="9-5">9-5</option>
                           <option value="1-5">1-5</option>
+                          <option value="1-9">1-9</option>
                         </select>
                       </td>
                       <td>
@@ -336,12 +337,12 @@
                       <td><%=destination.DestName%></td>
                       <td><%=destination.EquivDFare%></td>
                       <td>
-                        <a href="/routes/destination/<%=destination.DestName%>/edit_destinations">
+                        <a href="/destination/<%=destination.DestName%>/edit">
                           <i class="material-icons">&#xE254;</i>
                         </a>
                       <form
                         id="delete_destination_<%=destination.DestName%>_form"
-                        action="/routes/destination/<%=destination.DestName%>?_method=DELETE"
+                        action="/destination/<%=destination.DestName%>?_method=DELETE"
                         method="POST">
                           <a
                             onclick="document.getElementById('delete_destination_<%=destination.DestName%>_form').submit();">
@@ -354,7 +355,7 @@
                     <% } %>
                     <tr>
                       <form
-                        action="/routes/add/destinations"
+                        action="/destinations/new"
                         id="add_destination_form"
                         method="POST"
                         novalidate

@@ -28,9 +28,9 @@
                 />
               </svg>
               <div class="mt-3">
-                <h4><%=row.FirstName%><%=" "%><%=row.LastName%></h4>
-                <p class="text-secondary mb-1">Driver</p>
-                <p class="text-muted font-size-sm"><%=row.RouteID%></p>
+                <h4><%=info.FirstName%> <%=info.LastName%></h4>
+                <p class="text-secondary mb-1">Student</p>
+                <p class="text-muted font-size-sm"><%=info.Department%></p>
                 <input
                   class="form-control form-control-sm"
                   id="formFileSm"
@@ -77,7 +77,7 @@
           <div class="tab-content">
             <div
               class="tab-pane fade show active"
-              id="profdetails"
+              id="personaldetails"
               role="tabpanel"
             >
               <div class="col-md-12 mt-4">
@@ -85,91 +85,85 @@
                   <div class="col-sm-3">
                     <h6 class="mb-0">Full Name</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
-                    <%=row.FirstName%><%=" "%><%=row.LastName%>
-                  </div>
+    
+                  <div class="col-sm-9 text-secondary"><%=info.FirstName%> <%=info.LastName%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <h6 class="mb-0">Driver ID</h6>
+                    <h6 class="mb-0">Cms ID</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.DriverID%></div>
+                  <div class="col-sm-9 text-secondary"><%=info.CmsID%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Email</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.Email%></div>
+                  <div class="col-sm-9 text-secondary">
+                    <%=info.Email%>
+                  </div>
                 </div>
                 <hr />
                 <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Contact</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary"><%=row.Phone%></div>
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Contact</h6>
                 </div>
-                <hr />
+                <div class="col-sm-9 text-secondary"><%=info.Phone%></div>
+              </div>
+              <hr />
                 <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">CNIC</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary"><%=row.CNIC%></div>
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Destination</h6>
                 </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Hire Date</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary"><%=row.HireDate%></div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">End Date</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary"><%=row.EndDate%></div>
-                </div>
+                <div class="col-sm-9 text-secondary"><%=Destination.DestName%></div>
+              </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Address</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.Address%></div>
+                  <div class="col-sm-9 text-secondary"><%=info.Address%></div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Driver Name</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary"><%=Driver.FirstName%> <%=Driver.LastName%> </div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Vehicle</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.vehicleno%></div>
+                  <div class="col-sm-9 text-secondary"><%=Driver.vehicleno%> </div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <h6 class="mb-0">Route</h6>
+                    <h6 class="mb-0">Driver ID</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=row.RouteID%></div>
+                  <div class="col-sm-9 text-secondary"><%=info.DriverID%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Timings</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">9-5</div>
+                  <div class="col-sm-9 text-secondary"><%=Route.ShiftTime%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Fee/month</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">10000</div>
+                  <div class="col-sm-9 text-secondary"><%=Destination.EquivDFare%></div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-12">
-                    <a class="btn btn-info" target="__blank" href=""
+                    <a class="btn btn-info" target="__blank" href="/user/profile"
                       >Edit Profile</a
                     >
                     <a class="btn btn-info" target="__blank" href="/home"
@@ -179,6 +173,7 @@
                 </div>
               </div>
             </div>
+
 
             <div class="tab-pane fade" id="payments" role="tabpanel">
               <div class="card-body">

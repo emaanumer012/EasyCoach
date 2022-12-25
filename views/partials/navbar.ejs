@@ -181,8 +181,16 @@
 	<div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
 		<div class="navbar-nav">
 			<a href="/home" class="nav-item nav-link">Home</a>
-      <a href="/profile" class="nav-item nav-link">Profile</a>
-			<a href="/salaryinvoice" class="nav-item nav-link">Salaries & Invoices</a>		
+      <a href="/user/profile/a" class="nav-item nav-link">Profile</a>
+				
+			<div class="nav-item dropdown">
+				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Payments & Salaries</a>
+			    <div class="dropdown-menu">
+				<a href="/student/invoice" class="dropdown-item">Students Invoice</a>
+				<a href="/driver/salary" class="dropdown-item">Drivers Salary</a>
+				<a href="/employee/salary" class="dropdown-item">Employee Salary</a>
+		      	</div>
+			</div>	
 			<div class="nav-item dropdown">
 				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Manage</a>
 				<div class="dropdown-menu">					
@@ -193,16 +201,17 @@
 					<a href="/managevehicles" class="dropdown-item">Vehicles</a>
                 </div>
             </div>
+			<a href="/admin/requests" class="nav-item nav-link">Requests</a>
 			<a href="/user" class="nav-item nav-link">About Us</a>
         </div>
-		<!--<form name="search" class="navbar-form form-inline">
+		<form name="search" class="navbar-form form-inline">
 			<div class="input-group search-box">								
 				<input type="text" id="search" class="form-control" placeholder="Search here...">
 				<div class="input-group-append">
 					<span class="input-group-text"><i class="material-icons">&#xE8B6;</i></span>
 				</div>
 			</div>
-		</form>-->
+		</form>
 		<div class="navbar-nav action-buttons ml-auto">	
 			<% if(current_user) {%> 
 			<a href="/logout" class="nav-item nav-link dropdown-toggle mr-2">Logout</a>

@@ -242,7 +242,7 @@
                           <select
                             id="timings_student"
                             name="timings"
-                            class="form-control custom-select bg-white border-left-0 border-md d-inline select_timing"
+                            class="form-control custom-select bg-white border-left-0 border-md d-inline select_timing_student"
                             required>
                             <option value=""selected hidden disabled>Available Options</option>
                           </select>
@@ -282,7 +282,7 @@
                 <div class="tab-pane fade" id="driver" role="tabpanel">
   
                   <div class="col-md-7 col-lg-11 ml-auto" style="padding: 30px">
-                    <form action="/driver_register" id="driver_register" name="driver_register" method="POST" novalidate class="needs-validation">
+                    <form action="/driver/register" id="driver_register" name="driver_register" method="POST" novalidate class="needs-validation">
                       <div class="row">
                         <!-- First Name -->
                         <div class="input-group col-lg-6 mb-4">
@@ -297,7 +297,8 @@
                             name="first_name"
                             placeholder="First Name"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -314,7 +315,8 @@
                             name="last_name"
                             placeholder="Last Name"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -331,7 +333,8 @@
                             name="cnic"
                             placeholder="CNIC"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -348,7 +351,8 @@
                             name="email"
                             placeholder="Email Address"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -365,7 +369,8 @@
                             name="address"
                             placeholder="Home Address"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -390,7 +395,8 @@
                             name="phnumber"
                             placeholder="Phone Number"
                             class="form-control bg-white border-md border-left-0 pl-3"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -405,12 +411,13 @@
                               name="date"
                               type="date"
                               class="form-control bg-white border-left-1 border-right-1 border-md"
-                            />
+                              required
+                              />
                             <div class="valid-feedback">Looks good</div>
                           </div>
                         </div>
                   
-                        <!-- Dest Name -->
+                        <!-- Route -->
                         <div class="input-group col-lg-12 mb-4">
                           <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
@@ -418,97 +425,61 @@
                             </span>
                           </div>
                           <select
-                            id="dest_name"
-                            name="dest_name"
+                            id="route_driver"
+                            name="route"
                             class="form-control custom-select bg-white border-left-0 border-md"
-                          >
-                            <option value="text-muted">Choose your Route</option>
-                            <option value="Bahria Town">Bahria Town</option>
-                            <option value="F11">F11</option>
-                            <option value="Gulberg Greens">Gulberg Greens</option>
-                            <option value="Madia Town">Media Town</option>
-                            <option value="Chakalala Scheme 3">Chaklala Scheme 3</option>
+                          required
+                            >
+                            <option value=""hidden disabled selected>Select Route</option>
+                            <% let length=destinations_route.length %> 
+                            <% for (let i=0;i<length/4;i++){ %> 
+                            <option value="<%=destinations_route.shift()%>"><%=destinations_route.shift()%> - <%=destinations_route.shift()%> - <%=destinations_route.shift()%></option>
+                            <%} %> 
                           </select>
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
                         <!--Timings-->
-                        <div class="col-lg-12 mb-2">
+                        <div class="col-lg-12 mb-3">
                           <label
                             id="timings"
                             name="shiftimings"
                             style="max-width: 90px; max-height: 38px"
-                            class="form-control font-weight-bold text-muted"
+                            class="form-control font-weight-bold text-muted d-inline"
                           >
                             Timings</label
                           >
-                          <div class="input-group col-lg-12 mb-4 d-inline-block">
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="exampleRadios"
-                                id="ninefive"
-                                value="option1"
-                                checked
-                              />
-                              <label
-                                class="form-check-label text-muted"
-                                style="max-width: 110px"
-                                for="ninefivelabel"
-                                >9 am - 5 pm</label
-                              >
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="exampleRadios"
-                                id="onefive"
-                                value="option2"
-                              />
-                              <label class="form-check-label text-muted" for="onefivelabel"
-                                >1 pm - 5 pm</label
-                              >
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="exampleRadios"
-                                id="onenine"
-                                value="option3"
-                              />
-                              <label class="form-check-label text-muted" for="onefive"
-                                >1 pm - 9 pm</label
-                              >
-                            </div>
+                          <select
+                            id="timings_driver"
+                            name="timings"
+                            class="form-control custom-select bg-white border-left-0 border-md d-inline select_timing_driver"
+                            required>
+                            <option value=""selected hidden disabled>Available Shifts</option>
+                          </select>
                           </div>
-                        </div>
                   
                         <!--vehicle designation-->
-                        <div class="row mb-4">
+                        <div class="col-lg-12 mb-3">
                           <label
-                            class="col-lg-6 col-form-label text-muted bg-white border-left-0 border-md"
-                            >Designate Vehicle</label
+                            id="vehicle_label"
+                            name="vehicle_label"
+                            style="max-width: 90px; max-height: 38px"
+                            class="form-control font-weight-bold text-muted d-inline"
                           >
-                          <div class="col-sm-18">
-                            <select
-                              class="form-select"
-                              multiple
-                              aria-label="multiple select example"
-                            >
-                              <option selected>Plate Number, Model, Number of seats</option>
-                              <option value="1" class="text-muted">
-                                C-1728, HIACE, 11 Seats
-                              </option>
-                              <option value="2" class="text-muted">Two</option>
-                              <option value="3" class="text-muted">Three</option>
+                          Designate Vehicle</label
+                          >
+                          <select
+                            id="vehicle"
+                            name="vehicle"
+                            class="form-control custom-select bg-white border-left-0 border-md d-inline select_timing_driver"
+                            required>
+                            <option value=""selected hidden disabled>Available Vehicles</option>
+                            <%   for(let vehicle of vehicles){    %>
+                              <option value="<%=vehicle.VehicleNo%>"><%=vehicle.Model%> - <%=vehicle.VehicleNo%> - <%=vehicle.NumOfSeats%> Seats</option>
+                            <% } %> 
                             </select>
-                            <div class="valid-feedback">Looks good</div>
                           </div>
-                        </div>
-                  
+                        
                         <!-- Password -->
                         <div class="input-group col-lg-6 mb-4">
                           <div class="input-group-prepend">
@@ -522,24 +493,8 @@
                             name="password"
                             placeholder="Password"
                             class="form-control bg-white border-left-0 border-md"
-                          />
-                          <div class="valid-feedback">Looks good</div>
-                        </div>
-                  
-                        <!-- Password Confirmation -->
-                        <div class="input-group col-lg-6 mb-4">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text bg-white px-4 border-md border-right-0">
-                              <i class="fa fa-lock text-muted"></i>
-                            </span>
-                          </div>
-                          <input
-                            id="password_confirmation"
-                            type="password"
-                            name="password_confirmation"
-                            placeholder="Confirm Password"
-                            class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -557,7 +512,7 @@
                 <div class="tab-pane fade" id="employee" role="tabpanel">
   
                   <div class="col-md-7 col-lg-11 ml-auto" style="padding: 30px">
-                    <form action="/employee_register" id="employee_register" method="POST" novalidate class="needs-validation">
+                    <form action="/employee/register" id="employee_register" method="POST" novalidate class="needs-validation">
                       <div class="row">
                         <!-- First Name -->
                         <div class="input-group col-lg-6 mb-4">
@@ -572,7 +527,8 @@
                             name="first_name"
                             placeholder="First Name"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -589,7 +545,8 @@
                             name="last_name"
                             placeholder="Last Name"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -606,7 +563,8 @@
                             name="cnic"
                             placeholder="CNIC"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -623,7 +581,8 @@
                             name="email"
                             placeholder="Email Address"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -640,7 +599,8 @@
                             name="address"
                             placeholder="Home Address"
                             class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -665,7 +625,8 @@
                             name="phnumber"
                             placeholder="Phone Number"
                             class="form-control bg-white border-md border-left-0 pl-3"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -680,7 +641,8 @@
                               name="date"
                               type="date"
                               class="form-control bg-white border-left-1 border-right-1 border-md"
-                            />
+                              required
+                              />
                             <div class="valid-feedback">Looks good</div>
                           </div>
                         </div>
@@ -696,13 +658,12 @@
                             id="job_name"
                             name="job_name"
                             class="form-control custom-select bg-white border-left-1 border-md"
-                          >
-                            <option value="" hidden disabled selected>Job Name</option>
+                            required
+                            >
+                            <option value="" hidden disabled selected>Job Type</option>
                             <option value="Accountant">Accountant</option>
-                            <option value="">Human Resources</option>
-                            <option value="">Superviser</option>
-                            <option value="">Manager</option>
-                            <option value="">Customer Support</option>
+                            <option value="Human Resources">Human Resources</option>
+                            <option value="Superviser">Superviser</option>
                           </select>
                           <div class="valid-feedback">Looks good</div>
                         </div>
@@ -720,24 +681,8 @@
                             name="password"
                             placeholder="Password"
                             class="form-control bg-white border-left-0 border-md"
-                          />
-                          <div class="valid-feedback">Looks good</div>
-                        </div>
-                  
-                        <!-- Password Confirmation -->
-                        <div class="input-group col-lg-6 mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text bg-white px-4 border-md border-right-0">
-                              <i class="fa fa-lock text-muted"></i>
-                            </span>
-                          </div>
-                          <input
-                            id="passwordConfirmation"
-                            type="password"
-                            name="passwordConfirmation"
-                            placeholder="Confirm Password"
-                            class="form-control bg-white border-left-0 border-md"
-                          />
+                            required
+                            />
                           <div class="valid-feedback">Looks good</div>
                         </div>
                   
@@ -762,14 +707,13 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="/js/front_js.js" ></script>
+    
 
 
     <script >
       $(document).ready(function() {
           $('#dest_name_student').on('change', function() {
                var dest_name = this.value;
-               console.log(dest_name)
                $("#timings_student").html('');
                $.ajax({
                   url: "http://localhost:3000/student/register/get_timings",
@@ -777,11 +721,26 @@
                   data: {dest_name},
                   dataType: 'json',
                   success: function(result) {
-                      console.log("inside success")
-                      $('#timings_student').html('<option value="" selected hidden disabled>Available Options</option>');
+                      $('#timings_student').html('<option value="" selected hidden disabled>Available Shifts</option>');
                       for(let timing of result.timings[0]){
-                        console.log(timing)
                         $("#timings_student").append(`<option value="${timing.ShiftTime}">${timing.ShiftTime}</option>`);
                       }
                       }});});}); 
       </script>
+      <script >
+        $(document).ready(function() {
+            $('#route_driver').on('change', function() {
+                 var route_id = this.value;
+                 $("#timings_driver").html('');
+                 $.ajax({
+                    url: "http://localhost:3000/driver/register/get_timings",
+                    type: "POST",
+                    data: {route_id},
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#timings_driver').html('<option value="" selected hidden disabled>Available Shifts</option>');
+                        for(let timing of result.timings[0]){
+                          $("#timings_driver").append(`<option value="${timing.ShiftTime}">${timing.ShiftTime}</option>`);
+                        }
+                        }});});}); 
+        </script>
