@@ -44,7 +44,14 @@
           <tbody>
             <% rows.forEach(row => { %>
             <tr>
-              <th scope="rownum"><%=row.EmpID%></th>
+              <th scope="rownum">
+                <a
+                  href="/employeeprofile?row=<%= encodeURIComponent(JSON.stringify(row)) %>"
+                  style="position: absolute; display: block; width: 98%"
+                >
+                  <%=row.EmpID%></a
+                >
+              </th>
               <td class="text-truncate" style="max-width: 200px">
                 <%=row.FirstName%><%= " "%><%=row.LastName%>
               </td>
