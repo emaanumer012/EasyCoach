@@ -10,35 +10,35 @@
           <table class="table user-table">
             <thead>
               <tr>
-                <th class="border-top-0">Challan Number</th>
-                <th class="border-top-0">Name</th>
+                
                 <th class="border-top-0">Employee ID</th>
-                <th class="border-top-0">Due Date</th>
-                <th class="border-top-0">Amount Due</th>
+                <th class="border-top-0">Name</th>
+                <th class="border-top-0">Job Title</th>
+                <th class="border-top-0">Phone</th>
+                <th class="border-top-0">Salary</th>
                 <th class="border-top-0">Status</th>
-                <th class="border-top-0">Action</th>
               </tr>
             </thead>
             <tbody>
               <% rows.forEach(row => { %>
-              <tr>
-                <td><%=row.ChallanNum%></td>
-                <td><%=row.FirstName%><%=" "%><%=row.LastName%></td>
-                <td><%=row.EmpID%></td>
-                <td><%=row.DueDate%></td>
-                <td><%=row.SalaryAmount%></td>
-                <td>
-                  <span class="badge bg-success"><%=row.PaidStatus%></span>
-                </td>
-                <td>
-                  <a
-                    href="#"
-                    class="btn btn-success d-none d-md-inline-block btn-sm text-white"
-                    ><i class="mdi mdi-pencil"></i> edit</a
-                  >
-                </td>
-                <% }) %>
-              </tr>
+                <tr>
+                  <td><%=row.EmpID%></td>
+                  <td><%=row.FirstName%><%=" "%><%=row.LastName%></td>
+                  <td><%=row.JobName%></td>
+                  <td><%=row.Phone%></td>
+                  <td><%=row.SalaryAmount%></td>
+                  <td>
+                    <%=row.PaidStatus%>
+                  </td>
+                  <td>
+                    <a
+                      href="/employee/salary/<%=row.EmpID%>/Paid"
+                      class="btn btn-success d-none d-md-inline-block btn-sm text-white"
+                      >Set as Paid</a
+                    >
+                  </td>
+                  <% }) %>
+                </tr>
             </tbody>
           </table>
         </div>

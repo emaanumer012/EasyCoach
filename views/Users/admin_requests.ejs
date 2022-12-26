@@ -39,32 +39,38 @@
             <th class="text-center">Information</th>
             <th class="text-center">Action</th>
           </tr>
+          <% let i=0; %> 
+          <% for (let request of requests){ %> 
           <tr>
-            <td class="pt-3-half" contenteditable="true">1</td>
-            <td class="pt-3-half" contenteditable="true">Driver</td>
-            <td class="pt-3-half" contenteditable="true">2</td>
-            <td class="pt-3-half" contenteditable="true">Ahmed Ayaz</td>
-            <td class="pt-3-half" contenteditable="true">01/01/2001</td>
-            <td class="pt-3-half" contenteditable="true">Leave chahiye pls</td>
+            <td class="pt-3-half" contenteditable="true"><%=++i%></td>
+            <td class="pt-3-half" contenteditable="true"><%=request.UserRole%></td>
+            <td class="pt-3-half" contenteditable="true"><%=request.UserID%></td>
+            <td class="pt-3-half" contenteditable="true"><%=request.UserName%></td>
+            <td class="pt-3-half" contenteditable="true"><%=request.RequestDate%></td>
+            <td class="pt-3-half" contenteditable="true"><%=request.Information%></td>
             <td>
-              <span class="table-remove"
-                ><button
+              <span class="table-remove "
+                ><a
                   type="button"
-                  class="btn btn-danger btn-rounded btn-sm my-0"
-                >
-                  Reject
-                </button></span
-              >
-              <span class="table-remove"
-                ><button
-                  type="button"
-                  class="btn btn-primary btn-rounded btn-sm my-0"
+                  class="btn btn-primary btn-rounded btn-sm mb-1"
+                  href="/admin/requests/<%=request.requestID%>/Approved"
                 >
                   Approve
-                </button></span
+              </a></span
               >
+              <span class="table-remove "
+                ><a
+                  type="button"
+                  class="btn btn-danger btn-rounded btn-sm mt-1"
+                  href="/admin/requests/<%=request.requestID%>/Rejected"
+                >
+                  Reject
+                </a></span
+              >
+              
             </td>
           </tr>
+          <% } %> 
         </table>
       </div>
     </div>

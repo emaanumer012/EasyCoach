@@ -10,31 +10,30 @@
           <table class="table user-table">
             <thead>
               <tr>
-                <th class="border-top-0">Challan Number</th>
-                <th class="border-top-0">Name</th>
                 <th class="border-top-0">Driver ID</th>
-                <th class="border-top-0">Due Date</th>
-                <th class="border-top-0">Amount Due</th>
+                <th class="border-top-0">Name</th>
+                <th class="border-top-0">Vehicle No</th>
+                <th class="border-top-0">Phone</th>
+                <th class="border-top-0">Salary</th>
                 <th class="border-top-0">Status</th>
-                <th class="border-top-0">Action</th>
               </tr>
             </thead>
             <tbody>
               <% rows.forEach(row => { %>
               <tr>
-                <td><%=row.ChallanNumber%></td>
-                <td><%=row.FirstName%><%=" "%><%=row.LastName%></td>
                 <td><%=row.DriverID%></td>
-                <td><%=row.DueDate%></td>
+                <td><%=row.FirstName%><%=" "%><%=row.LastName%></td>
+                <td><%=row.vehicleno%></td>
+                <td><%=row.Phone%></td>
                 <td><%=row.SalaryAmount%></td>
                 <td>
-                  <span class="badge bg-success"><%=row.PaidStatus%></span>
+                  <%=row.PaidStatus%>
                 </td>
                 <td>
                   <a
-                    href="#"
+                    href="/driver/salary/<%=row.DriverID%>/Paid"
                     class="btn btn-success d-none d-md-inline-block btn-sm text-white"
-                    ><i class="mdi mdi-pencil"></i> edit</a
+                    >Set as Paid</a
                   >
                 </td>
                 <% }) %>

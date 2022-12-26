@@ -1,50 +1,111 @@
 <% layout("layouts/boilerplate.ejs") %>
 
-<div class="row">
-  <div class="col-lg-8">
-    <div
-      class="card shadow p-3 mb-5 bg-white rounded"
-      style="margin-top: 30px; margin-right: 60px; margin-left: 50px"
-    >
-      <div class="table-responsive">
-        <div class="table-wrapper">
-          <div class="table-title">
-            <div class="row g-0">
-              <div class="col-sm-8">
-                <h2>Vehicle <b>Details</b></h2>
-              </div>
-              <div class="col-sm-4">
-                <button type="button" class="btn btn-info add-new">
-                  <i class="fa fa-plus"></i> Add New
-                </button>
-                <button type="button" class="btn btn-success">
-                  <i class="material-icons">&#xE254;</i> Edit Use
-                </button>
-              </div>
-            </div>
-          </div>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Vehicle Plate Number</th>
-                <th>Number of Seats</th>
-                <th>Color</th>
-                <th>Model</th>
-                <th>Use End Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>C-1728</td>
-                <td>13</td>
-                <td>White</td>
-                <td>Hiace</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div
+    class="card"
+    style="margin-top: 40px; margin-left: 20px; margin-right: 20px"
+  >
+    <div class="card shadow">
+      <h5
+        class="card-title text-nowrap text-capitalize mb-0 col-sm-4 text-muted"
+        style="margin-top: 20px; margin-bottom: 0px"
+      >
+      Vehicle Details
+      </h5>
+      
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Vehicle Plate Number</th>
+              <th scope="col">Number of Seats</th>
+              <th scope="col">Color</th>
+              <th scope="col">Model</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let row of rows) { %>
+            <tr>
+              <td><%=row.VehicleNo%></td>
+              <td><%=row.NumOfSeats%></td>
+              <td><%=row.Color%></td>
+              <td><%=row.Model%></td>
+              
+              <td><form
+                id="delete_vehicle_<%=row.VehicleNo%>_form"
+                action="/vehicle/<%=row.VehicleNo%>?_method=DELETE"
+                method="POST">
+                  <a
+                    onclick="document.getElementById('delete_vehicle_<%=row.VehicleNo%>_form').submit();">
+                    <i class="material-icons">&#xE872;</i>
+                  </a>
+                </form></td>
+            </tr>
+            <% } %>
+            <tr>
+              
+<form action="/vehicle/new" id="vehicle_register" method="POST"  novalidate class="needs-validation">
+     <td><input
+      class="form-control"
+      type="text"
+      id="vehicle_no"
+      name="vehicle_no"
+      placeholder="Vehicle No"
+      required
+    />
+  </td>
+    
+  <td>
+    <input
+      class="form-control"
+      type="number"
+      id="total_seats"
+      name="total_seats"
+      placeholder="Seats"
+      required
+    />
+  </td>
+<td>
+  <input
+    class="form-control"
+    type="text"
+    id="color"
+    name="color"
+    placeholder="Color"
+    required
+  /></td>
+ 
+
+<td> <input
+  class="form-control"
+  type="text"
+  id="model"
+  name="model"
+  placeholder="Model"
+  required
+/>
+
+</td>
+ 
+
+<td> 
+  <button class="btn btn-success" type="submit" form="vehicle_register">
+    Register
+  </button>
+</td>
+
+</form>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-</div>
+
+
+</body>

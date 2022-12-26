@@ -123,7 +123,9 @@
                   <div class="col-sm-3">
                     <h6 class="mb-0">Salary</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=Emp_details.SalaryAmount%> </div>
+                  <% for(let salary of Emp_details){ %> 
+                  <div class="col-sm-9 text-secondary"><%=salary.SalaryAmount%> </div>
+                <% } %> 
                 </div>
                 <hr />
                 <div class="row">
@@ -144,30 +146,101 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">Challan Number</th>
-                      <th scope="col">Due Date</th>
-                      <th scope="col">Amount</th>
+                      <th scope="col">Driver ID</th>
+                      <th scope="col">Salary Amount</th>
                       <th scope="col">Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>333</td>
-                      <td>01/01/2022</td>
-                      <td>1000</td>
-                      <td>Paid</td>
-                    </tr>
+                    <% for(let salary of Emp_details){ %> 
+                      <tr>
+                        <td><%=salary.EmpID%></td>
+                        <td><%=salary.SalaryAmount%></td>
+                        <td><%=salary.PaidStatus%></td>
+                      </tr>
+                      <% } %> 
                   </tbody>
                 </table>
               </div>
             </div>
 
             <div class="tab-pane fade" id="requests" role="tabpanel">
-              <div
-                class="col-md-7 col-lg-11 ml-auto"
-                style="padding: 30px"
-              ></div>
-            </div>
+        
+              <div class="card-body">
+                <h5 class="card-title">Previous Requests</h5>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Request</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Response</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for (let request of request_info){ %> 
+                    <tr>
+                      <td><%=request.Information%> </td>
+                      <td><%=request.RequestDate%> </td>
+                      <td><%=request.AdminAction%></td>
+                    </tr>
+                    <% } %> 
+                  </tbody>
+                </table>
+              </div>   
+               
+              <div class="card-body">
+                <h5 class="card-title">Add Request</h5>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Request</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <form
+                      action="/user/profile/<%=id%>/request"
+                      id="employee_request_form"
+                      method="POST"
+                      novalidate
+                      class="needs-validation"
+                    > 
+                    
+                    <td>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="employee_request"
+                        id="employee_request"
+                        required
+                        placeholder="Request"
+                      />
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-success"
+                        type="submit"
+                        form="employee_request_form"
+                      >
+                        Add
+                      </button>
+                    </td>
+                  
+                     </form>
+                      
+                      
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+       
+          </div>
+
+
+
+
+
           </div>
         </div>
       </div>

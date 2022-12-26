@@ -10,32 +10,47 @@
           <table class="table user-table">
             <thead>
               <tr>
-                <th class="border-top-0">Challan Number</th>
-                <th class="border-top-0">Name</th>
                 <th class="border-top-0">Cms ID</th>
-                <th class="border-top-0">Due Date</th>
-                <th class="border-top-0">Amount Due</th>
-                <th class="border-top-0">Status</th>
+                <th class="border-top-0">Challan Number</th>
+                <th class="border-top-0">Transaction ID</th>
+                <th class="border-top-0">Name</th>
+                <th class="border-top-0">Amount</th>
+                <th class="border-top-0">Request Date</th>
+                <th></th>
                 <th class="border-top-0">Action</th>
               </tr>
             </thead>
             <tbody>
               <% rows.forEach(row => { %>
               <tr>
+                <td><%=row.UserID%></td>
                 <td><%=row.ChallanNum%></td>
-                <td><%=row.FirstName%><%=" "%><%=row.LastName%></td>
-                <td><%=row.CmsID%></td>
-                <td><%=row.PaymentDate%></td>
-                <td><%=row.Amount%></td>
+                <td><%=row.TransactionID%></td>
+                <td><%=row.UserName%></td>
+                <td><%=row.PaidAmount%></td>
+                <td><%=row.RequestDate%></td>
                 <td>
                   <span class="badge bg-success"><%=row.PaidStatus%></span>
                 </td>
                 <td>
-                  <a
-                    href="#"
-                    class="btn btn-success d-none d-md-inline-block btn-sm text-white"
-                    ><i class="mdi mdi-pencil"></i> edit</a
-                  >
+                  <span class="table-remove "
+                ><a
+                  type="button"
+                  class="btn btn-primary btn-rounded btn-sm mb-1"
+                  href="/student/invoice/<%=row.P_requestID%>/Paid"
+                >
+                  Accept
+              </a></span
+              >
+              <span class="table-remove "
+                ><a
+                  type="button"
+                  class="btn btn-danger btn-rounded btn-sm mt-1"
+                  href="/student/invoice/<%=row.P_requestID%>/Unpaid"
+                >
+                  Reject
+                </a></span
+              >
                 </td>
                 <% }) %>
               </tr>
