@@ -1,4 +1,6 @@
-//requiring basic things
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const express = require("express");
 const path = require("path");
@@ -7,6 +9,9 @@ var mysql = require("mysql2/promise");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
 const bcrypt = require("bcrypt");
+const multer = require("multer");
+const { storage, cloudinary } = require("./cloudinary/index.js");
+const upload = multer({ storage });
 
 const methodover = require("method-override");
 const flash = require("connect-flash");
@@ -19,7 +24,7 @@ const connect = async function () {
   con = await mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "308NegraAroyoLane",
+    password: "@bubakar1243",
     database: "transport",
     insecureAuth: true,
   });
@@ -47,53 +52,87 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 app.use(flash());
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.current_user = req.session.__id;
+  res.locals.admin = null;
+  const [rows] = await con.execute(
+    `select Email from login where UserRole="Administrator"`
+  );
+  if (rows[0].Email == req.session.__id) {
+    res.locals.admin = req.session.__id;
+  }
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
 
 app.get("/", (req, res) => {
-  res.render("login.ejs");
+  res.render("Users/login.ejs");
 });
 app.get("/login", (req, res) => {
-  res.render("login.ejs");
+  res.render("Users/login.ejs");
 });
-
 app.get(
   "/home",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     const value = await con.execute(
-      `select SUM(Amount) from payment where MONTH(PaymentDate)= (MONTH(now())+ INTERVAL 1 MONTH) and YEAR(PaymentDate)=YEAR(now());`
+      `select SUM(Amount) AS SUMM from payment where MONTH(PaymentDate)= (MONTH(now())+ INTERVAL 1 MONTH) and YEAR(PaymentDate)=YEAR(now());`
     );
-    //SELECT SUM(Amount) FROM payment WHERE YEAR(PaymentDate) = YEAR(now()); //for annual earnings
-    //SELECT COUNT(*) FROM requests; //pending requests
-    //SELECT DestName,COUNT(*) FROM student WHERE Enddate IS NULL GROUP BY DestName; //Query for pie chart
-    //SELECT COUNT(*) FROM student WHERE MONTH(StartDate)=MONTH(now());  //query for new users
-    //SELECT SUM(Amount) FROM payment WHERE Year(PaymentDate)=Year(now()) GROUP BY MONTH(PaymentDate);retrieve month values for line graph
-    res.render("Home.ejs", { item: value });
+    const [rows1] = await con.execute(
+      `SELECT SUM(Amount) total FROM payment WHERE YEAR(PaymentDate) = YEAR(now())`
+    ); //for annual earnings
+    const [rows2] = await con.execute(`SELECT COUNT(*) p_req FROM requests`); //pending requests
+    const [rows3] = await con.execute(
+      `SELECT DestName,COUNT(*) count FROM student WHERE Enddate IS NULL GROUP BY DestName`
+    ); //Query for pie chart
+    const [rows4] = await con.execute(
+      `SELECT COUNT(*) new_count FROM student WHERE MONTH(StartDate)=MONTH(now())`
+    );
+    const [rows5] = await con.execute(
+      `SELECT SUM(Amount) m_count FROM payment WHERE Year(PaymentDate)=Year(now()) GROUP BY MONTH(PaymentDate)`
+    );
+
+    res.render("Home.ejs", {
+      item: value,
+      Annual_earnings: rows1[0].total,
+      pending_requests: rows2[0].p_req,
+      pie: rows3[0],
+      new_users: rows4[0].new_count,
+      monthly_count: rows5[0].m_count,
+    });
   })
 );
 
 //Handling Requests (Admin page)
 
-app.get("/admin/requests", async (req, res) => {
-  const [rows1] = await con.execute(
-    `SELECT * from requests where AdminAction="Pending" order by RequestDate desc`
-  );
-  res.render("Users/admin_requests.ejs", { requests: rows1 });
-});
+app.get(
+  "/admin/requests",
+  isLoggedIn,
+  isAdmin,
+  catchAsync(async (req, res) => {
+    const [rows1] = await con.execute(
+      `SELECT * from requests where AdminAction="Pending" order by RequestDate desc`
+    );
+    res.render("Users/admin_requests.ejs", { requests: rows1 });
+  })
+);
 
 // sending requests response to database
 
-app.get("/admin/requests/:request_id/:response", async (req, res) => {
-  const { request_id, response } = req.params;
-  await con.execute(
-    `update requests set AdminAction="${response}" where requestID=${request_id}`
-  );
-  res.redirect(`/admin/requests`);
-});
+app.get(
+  "/admin/requests/:request_id/:response",
+  isLoggedIn,
+  isAdmin,
+  async (req, res) => {
+    const { request_id, response } = req.params;
+    await con.execute(
+      `update requests set AdminAction="${response}" where requestID=${request_id}`
+    );
+    res.redirect(`/admin/requests`);
+  }
+);
 
 //Register Students,Drivers,Employees
 
@@ -128,6 +167,8 @@ app.get(
 
 app.post(
   "/student/register",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     const [rows1] = await con.execute(
       `select * from student where CmsID=${req.body.cms}`
@@ -135,11 +176,6 @@ app.post(
     const [rows2] = await con.execute(
       `select * from login where Email="${req.body.email}"`
     );
-    const [rows3] =
-      await con.execute(`select DriverID from driver where RouteID in (
-    select RouteID from route where RouteID in(
-    select RouteID from route_destinations where DestName = "${req.body.dest_name}")
-    and ShiftTime = "${req.body.timings}") limit 1`);
     if (rows1[0]) {
       req.flash("error", "Student with this CMS ID already exists");
       return res.redirect("/register");
@@ -148,11 +184,18 @@ app.post(
       req.flash("error", "Student with this Email already exists");
       return res.redirect("/register");
     }
+    
     const hash = await bcrypt.hash(req.body.password, 12);
+    const [rows3] =
+      await con.execute(`select DriverID from driver where RouteID in (
+    select RouteID from route where RouteID in(
+    select RouteID from route_destinations where DestName = "${req.body.dest_name_student}")
+    and ShiftTime = "${req.body.timings}") limit 1`);
     let sql_statement1 =
       `INSERT INTO student VALUES ` +
       `("${req.body.first_name}", "${req.body.last_name}", "${req.body.phnumber}"
-  ,"${req.body.cms}","${req.body.email}","${req.body.address}","${req.body.department}",null,"${req.body.dest_name}","${rows3[0].DriverID}","${req.body.starting_date}")`;
+  ,"${req.body.cms}","${req.body.email}","${req.body.address}","${req.body.department}",null,
+  "${req.body.dest_name_student}","${rows3[0].DriverID}","${req.body.starting_date}",null,null)`;
     let sql_statement2 =
       `INSERT INTO login VALUES ` +
       `("${req.body.email}", "${hash}", "Student","1")`;
@@ -167,26 +210,41 @@ app.post(
         rows4[0].RouteID
       }"`
     );
+    const [rows5] = await con.execute(
+      "select max(ChallanNum) max_id from payment"
+    );
+    const [rows6] = await con.execute(
+      `select * from destinations where DestName="${req.body.dest_name_student}"`
+    );
+    await con.execute(`insert into payment values
+                (${rows5[0].max_id + 1},DATE_ADD(CURDATE(), INTERVAL 30 DAY),${
+      rows6[0].EquivDFare},"Unpaid","${req.body.cms}")`);
     req.flash("success", "Registered Student Successfully");
-    res.redirect("/home");
+    res.redirect("/register");
   })
 );
 
 //dynamic change of student register
 
-app.post("/student/register/get_timings", async (req, res) => {
-  const rows = await con.execute(`select ShiftTime from route where RouteID in (
+app.post(
+  "/student/register/get_timings",
+  isLoggedIn,
+  isAdmin,
+  async (req, res) => {
+    const rows =
+      await con.execute(`select ShiftTime from route where RouteID in (
     select distinct RouteID from route_destinations where DestName="${req.body.dest_name}")
     and FreeSlots>0`);
-  res.json({
-    msg: "success",
-    timings: rows,
-  });
-});
+    res.json({
+      msg: "success",
+      timings: rows,
+    });
+  }
+);
 
 // student Invoice
 
-app.get("/student/invoice", async (req, res) => {
+app.get("/student/invoice", isLoggedIn, isAdmin, async (req, res) => {
   const [rows] = await con.execute(
     `SELECT * from payment_requests where AdminAction="Pending"`
   );
@@ -194,35 +252,42 @@ app.get("/student/invoice", async (req, res) => {
 });
 
 //action on students payment details sent
-app.get("/student/invoice/:p_request_id/:response", async (req, res) => {
-  const { p_request_id, response } = req.params;
-  const [rows] = await con.execute(`select * from payment where ChallanNum=
+app.get(
+  "/student/invoice/:p_request_id/:response",
+  isLoggedIn,
+  isAdmin,
+  async (req, res) => {
+    const { p_request_id, response } = req.params;
+    const [rows] = await con.execute(`select * from payment where ChallanNum=
                  (select ChallanNum from payment_requests where P_requestID=${p_request_id})
                  and Amount=(select PaidAmount from payment_requests where P_requestID=${p_request_id})`);
-  if (!rows[0] && response == "Paid") {
-    req.flash("error", "Pending Payment Not Found");
-    return res.redirect(`/student/invoice`);
-  }
-  if (response == "Unpaid") {
+    if (!rows[0] && response == "Paid") {
+      req.flash("error", "Pending Payment Not Found");
+      return res.redirect(`/student/invoice`);
+    }
+    if (response == "Unpaid") {
+      await con.execute(
+        `update payment_requests set AdminAction="${response}" where P_requestID=${p_request_id}`
+      );
+      req.flash("success", "Set request as Unpaid");
+      return res.redirect(`/student/invoice`);
+    }
     await con.execute(
       `update payment_requests set AdminAction="${response}" where P_requestID=${p_request_id}`
     );
-    req.flash("success", "Set request as Unpaid");
-    return res.redirect(`/student/invoice`);
-  }
-  await con.execute(
-    `update payment_requests set AdminAction="${response}" where P_requestID=${p_request_id}`
-  );
-  await con.execute(`update payment set PaidStatus="${response}" where ChallanNum=
+    await con.execute(`update payment set PaidStatus="${response}" where ChallanNum=
   (select ChallanNum from payment_requests where P_requestID=${p_request_id}) `);
-  req.flash("success", "Stauts set as Unpaid");
-  res.redirect(`/student/invoice`);
-});
+    req.flash("success", "Stauts set as Unpaid");
+    res.redirect(`/student/invoice`);
+  }
+);
 
 // registering a driver
 
 app.post(
   "/driver/register",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, 12);
     const [rows1] = await con.execute(
@@ -241,7 +306,7 @@ app.post(
         req.body.last_name
       }", "${req.body.phnumber}"
   ,"${req.body.email}","${req.body.cnic}","${req.body.vehicle}",
-  "${req.body.route}","${req.body.address}","${req.body.date}",null)`;
+  "${req.body.route}","${req.body.address}","${req.body.date}",null,null,null)`;
     let sql_statement1 =
       `INSERT INTO login VALUES ` +
       `("${req.body.email}", "${hash}", "Driver","1")`;
@@ -253,27 +318,34 @@ app.post(
     await con.execute(`update route
   set Status="active" ,VehicleNo="${req.body.vehicle}" ,FreeSlots=${rows3[0].NumOfSeats} where RouteID="${req.body.route}"`);
     await con.execute(`insert into dsalary values
-                     (${rows1[0].max_id + 1},"2023-11-11",50000,"unpaid")`);
+                     (${
+                       rows1[0].max_id + 1
+                     },DATE_ADD(CURDATE(), INTERVAL 30 DAY),50000,"Unpaid")`);
     req.flash("success", "Registered Driver Successfully");
-    res.redirect("/home");
+    res.redirect("/register");
   })
 );
 
 //dynamic change of driver register
 
-app.post("/driver/register/get_timings", async (req, res) => {
-  const rows = await con.execute(
-    `select ShiftTime from route where RouteID ="${req.body.route_id}"`
-  );
-  res.json({
-    msg: "success",
-    timings: rows,
-  });
-});
+app.post(
+  "/driver/register/get_timings",
+  isLoggedIn,
+  isAdmin,
+  async (req, res) => {
+    const rows = await con.execute(
+      `select ShiftTime from route where RouteID ="${req.body.route_id}"`
+    );
+    res.json({
+      msg: "success",
+      timings: rows,
+    });
+  }
+);
 
 // Driver Salary
 
-app.get("/driver/salary", async (req, res) => {
+app.get("/driver/salary", isLoggedIn, isAdmin, async (req, res) => {
   const [rows] = await con.execute(
     `SELECT * FROM dsalary d JOIN driver dr USING (DriverID) where PaidStatus="Unpaid"`
   );
@@ -281,19 +353,26 @@ app.get("/driver/salary", async (req, res) => {
 });
 
 //response on setting driver salary as paid
-app.get("/driver/salary/:id/:response", async (req, res) => {
-  const { id, response } = req.params;
-  await con.execute(
-    `update dsalary set PaidStatus="Paid" where DriverID=${id}`
-  );
-  req.flash("success", "Set Paid Successfully");
-  res.redirect("/driver/salary");
-});
+app.get(
+  "/driver/salary/:id/:response",
+  isLoggedIn,
+  isAdmin,
+  async (req, res) => {
+    const { id, response } = req.params;
+    await con.execute(
+      `update dsalary set PaidStatus="Paid" where DriverID=${id}`
+    );
+    req.flash("success", "Set Paid Successfully");
+    res.redirect("/driver/salary");
+  }
+);
 
 //registering an Employee
 
 app.post(
   "/employee/register",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res, next) => {
     const hash = await bcrypt.hash(req.body.password, 12);
     const [rows1] = await con.execute("select max(EmpID) max_id from employee");
@@ -311,7 +390,7 @@ app.post(
       }", "${req.body.phnumber}"
   ,"${req.body.email}", "${req.body.date}",null,"${req.body.address}","${
         req.body.job_name
-      }")`;
+      }",null,null)`;
     let sql_statement1 =
       `INSERT INTO login VALUES ` +
       `("${req.body.email}", "${hash}", "Employee","1")`;
@@ -322,17 +401,17 @@ app.post(
     );
     await con.execute(`insert into esalary
                        values     
-                  (${rows1[0].max_id + 1},"2023-11-11",${
+                  (${rows1[0].max_id + 1},DATE_ADD(CURDATE(), INTERVAL 30 DAY),${
       rows3[0].SalAmnt
-    },"unpaid")`);
+    },"Unpaid")`);
     req.flash("success", "Registered Employee Successfully");
-    res.redirect("/home");
+    res.redirect("/register");
   })
 );
 
 //  employee salary
 
-app.get("/employee/salary", async (req, res) => {
+app.get("/employee/salary", isLoggedIn, isAdmin, async (req, res) => {
   const [rows] = await con.execute(
     `SELECT * FROM esalary e JOIN employee em USING (EmpID) where PaidStatus="Unpaid"`
   );
@@ -340,25 +419,32 @@ app.get("/employee/salary", async (req, res) => {
 });
 
 //response on setting employee salary as paid
-app.get("/employee/salary/:id/:response", async (req, res) => {
-  const { id, response } = req.params;
-  await con.execute(`update esalary set PaidStatus="Paid" where EmpID=${id}`);
-  req.flash("success", "Set Paid Successfully");
-  res.redirect("/employee/salary");
-});
+app.get(
+  "/employee/salary/:id/:response",
+  isLoggedIn,
+  isAdmin,
+  async (req, res) => {
+    const { id, response } = req.params;
+    await con.execute(`update esalary set PaidStatus="Paid" where EmpID=${id}`);
+    req.flash("success", "Set Paid Successfully");
+    res.redirect("/employee/salary");
+  }
+);
 
 //Manage Students
 app.get(
   "/managestudents",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
-    const [rows] = await con.query(
-      `select FirstName,LastName,Email,CmsID,Phone,DestName, DriverID, Enddate from student`
-    );
+    const [rows] = await con.query(`select * from student`);
     res.render("Users/managestudents.ejs", { rows });
   })
 );
 app.get(
   "/searchstudents",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     var searchdata = req.query.searchdata;
     var sql =
@@ -383,20 +469,40 @@ app.get(
     res.render("Users/managestudents.ejs", { rows });
   })
 );
+app.get(
+  "/searchvehicles",
+  catchAsync(async (req, res) => {
+    var searchdata = req.query.searchdata;
+    var sql =
+      "select * from vehicle WHERE VehicleNo LIKE '%" +
+      searchdata +
+      "%' OR NumOfSeats LIKE '%" +
+      searchdata +
+      "%' OR Color LIKE '%" +
+      searchdata +
+      "%' OR Model LIKE '%" +
+      searchdata +
+      "%'";
+    const [rows] = await con.query(sql);
+    res.render("Users/managevehicles.ejs", { rows });
+  })
+);
 
 //Manage Drivers
 app.get(
   "/managedrivers",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
-    const [rows] = await con.query(
-      `select DriverID,FirstName,LastName,Email,CNIC,Phone,vehicleno,RouteID,EndDate from driver`
-    );
+    const [rows] = await con.query(`select * from driver`);
     res.render("Users/managedrivers.ejs", { rows });
   })
 );
 
 app.get(
   "/searchdrivers",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     var searchdata = req.query.searchdata;
     var sql =
@@ -416,7 +522,7 @@ app.get(
       searchdata +
       "%' OR EndDate LIKE '%" +
       searchdata +
-      "%' OR DiverID LIKE '%" +
+      "%' OR DriverID LIKE '%" +
       searchdata +
       "%'";
     const [rows] = await con.query(sql);
@@ -426,7 +532,9 @@ app.get(
 
 //Manage Employees
 app.get(
-  "/manageemployees",
+  "/employees/manage",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     const [rows] = await con.query(`select * from employee`);
     res.render("Users/manageemployees.ejs", { rows });
@@ -434,6 +542,8 @@ app.get(
 );
 app.get(
   "/searchemployees",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     var searchdata = req.query.searchdata;
     var sql =
@@ -444,8 +554,6 @@ app.get(
       "%' OR EmpID LIKE '%" +
       searchdata +
       "%' OR Email LIKE '%" +
-      searchdata +
-      "%' OR CNIC LIKE '%" +
       searchdata +
       "%' OR Phone LIKE'%" +
       searchdata +
@@ -458,27 +566,10 @@ app.get(
     res.render("Users/manageemployees.ejs", { rows });
   })
 );
-
-app.get(
-  "/searchvehicles",
-  catchAsync(async (req, res) => {
-    var searchdata = req.query.searchdata;
-    var sql =
-      "select * from vehicle WHERE VehicleNo LIKE '%" +
-      searchdata +
-      "%' OR NumOfSeats LIKE '%" +
-      searchdata +
-      "%' OR Color LIKE '%" +
-      searchdata +
-      "%' OR Model LIKE '%" +
-      searchdata +
-      "%'";
-    const [rows] = await con.query(sql);
-    res.render("Users/managevehicles.ejs", { rows });
-  })
-);
 app.get(
   "/routes/manage",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     let destination_array = [];
     const [rows1] = await con.execute(`select * from destinations`);
@@ -505,7 +596,7 @@ app.get(
 
 //Add new Destination
 
-app.post("/destinations/new", async (req, res) => {
+app.post("/destinations/new", isLoggedIn, isAdmin, async (req, res) => {
   const [rows1] = await con.execute(
     `select * from destinations where DestName="${req.body.destination_name}"`
   );
@@ -523,7 +614,7 @@ app.post("/destinations/new", async (req, res) => {
 
 //Render Edit Destination
 
-app.get("/destination/:id/edit", async (req, res) => {
+app.get("/destination/:id/edit", isLoggedIn, isAdmin, async (req, res) => {
   let destination_array = [];
   const [rows1] = await con.execute(`select * from destinations`);
   const [rows2] = await con.execute(
@@ -551,17 +642,17 @@ app.get("/destination/:id/edit", async (req, res) => {
 });
 //Edit Destination
 
-app.put("/destination/:id", async (req, res) => {
+app.put("/destination/:id", isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   await con.execute(`Update destinations set EquivDFare=${req.body.student_fare}
   where DestName ="${id}"`);
-  req.flash("success", "Destination Fare updated successfully");
+  req.flash("success", "Destination Fare updated Successfully");
   res.redirect("/routes/manage");
 });
 
 //Delete Destination
 
-app.delete("/destination/:id", async (req, res) => {
+app.delete("/destination/:id", isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const [rows1] = await con.execute(
     `SELECT distinct DestName FROM route_destinations;`
@@ -573,7 +664,7 @@ app.delete("/destination/:id", async (req, res) => {
     }
   }
   await con.execute(`Delete from destinations where DestName="${id}"`);
-  req.flash("success", "Destination removed successfully");
+  req.flash("success", "Destination Deleted Successfully");
   res.redirect("/routes/manage");
 });
 
@@ -581,6 +672,8 @@ app.delete("/destination/:id", async (req, res) => {
 
 app.post(
   "/routes/new",
+  isLoggedIn,
+  isAdmin,
   catchAsync(async (req, res) => {
     const [rows1] = await con.execute(
       `select * from route where RouteID="${req.body.route_id}"`
@@ -621,23 +714,30 @@ app.post(
 
 //Delete Routes
 
-app.delete("/routes/:id", async (req, res) => {
+app.delete("/routes/:id", isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
+  const [rows1] = await con.execute(
+    `select * from driver where RouteID="${id}"`
+  );
+  if (rows1[0]) {
+    const [rows2] = await con.execute(
+      `select * from student where DriverID="${rows1[0].DriverID}"`
+    );
+    if (rows2[0]) {
+      req.flash("error", "Routte is Assigned to Student");
+      return res.redirect("/routes/manage");
+    }
+  }
   await con.execute(`Delete from route_destinations where RouteID="${id}"`);
   await con.execute(`Delete from route where RouteID="${id}"`);
-  req.flash("success", "Route removed successfully");
+  req.flash("success", "Route Deleted Successfully");
   res.redirect("/routes/manage");
 });
 
-app.get(
-  "/managevehicles",
-  catchAsync((req, res) => {
-    res.render("Users/managevehicles.ejs");
-  })
-);
+
 
 //manage Vehicle
-app.get("/vehicle/manage", async (req, res) => {
+app.get("/vehicle/manage", isLoggedIn, isAdmin, async (req, res) => {
   const [rows] = await con.execute(
     `select * from vehicle where Enddate is Null`
   );
@@ -645,7 +745,7 @@ app.get("/vehicle/manage", async (req, res) => {
 });
 
 //add new vehicle
-app.post("/vehicle/new", async (req, res) => {
+app.post("/vehicle/new", isLoggedIn, isAdmin, async (req, res) => {
   const sql_statement1 =
     `INSERT INTO vehicle VALUES ` +
     `("${req.body.vehicle_no}", ${req.body.total_seats}, "${req.body.color}","${req.body.model}",null)`;
@@ -655,26 +755,28 @@ app.post("/vehicle/new", async (req, res) => {
 });
 
 //delete vehicle
-app.delete("/vehicle/:id", async (req, res) => {
+app.delete("/vehicle/:id", isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
-  const [rows] = await `select * from driver where vehicleno=${id}`;
+  const [rows] = await con.execute(`select * from driver where vehicleno="${id}"`);
+  console.log(rows[0])
   if (rows[0]) {
-    req.flash("error", "Unable to disable vehicle already in use!");
+    req.flash("error", "Canot Delete vehicle Assigned to Driver");
+    return res.redirect("/vehicle/manage")
   }
   await con.execute(`Delete from vehicle where VehicleNo="${id}"`);
-  req.flash("success", "Vehicle information disabled from use!");
+  req.flash("success", "vehicle Deleted Successfully");
   res.redirect("/vehicle/manage");
 });
 
 //taking payment details to database
 
-app.post("/user/profile/:id/payment", async (req, res) => {
+app.post("/user/profile/:id/payment", isLoggedIn, async (req, res) => {
   const { id } = req.params;
   const [admin_account] = await con.execute(
     `select * from login where UserRole="Administrator"`
   );
   if (admin_account[0].Email == req.session.__id) {
-    req.flash("error", "Cannot add payment details from Admin Account");
+    req.flash("error", "Canot Add Payment Details From Admin Account");
     return res.redirect(`/user/profile/${id}`);
   }
   const [rows1] = await con.execute(
@@ -697,7 +799,7 @@ app.post("/user/profile/:id/payment", async (req, res) => {
 
 // taking requests to Database
 
-app.post("/user/profile/:id/request", async (req, res) => {
+app.post("/user/profile/:id/request", isLoggedIn, async (req, res) => {
   const { id } = req.params;
   const [admin_account] = await con.execute(
     `select * from login where UserRole="Administrator"`
@@ -713,8 +815,13 @@ app.post("/user/profile/:id/request", async (req, res) => {
     const [rows1] = await con.execute(
       `select * from student where Email="${id}"`
     );
-    let sql_statement1 = `insert into requests(UserRole,UserID,UserName,RequestDate,Information,AdminAction) values
-                      ("Student","${rows1[0].CmsID}","${rows1[0].FirstName} ${rows1[0].LastName}",CURDATE(),
+    const [rows2] = await con.execute(
+      `select max(requestID) max_id from requests`
+    );
+    let sql_statement1 = `insert into requests values
+                      (${rows2[0].max_id + 1},"Student","${rows1[0].CmsID}","${
+      rows1[0].FirstName
+    } ${rows1[0].LastName}",CURDATE(),
                       "${req.body.student_request}","Pending")`;
     await con.execute(sql_statement1);
     return res.redirect(`/user/profile/${id}`);
@@ -722,8 +829,13 @@ app.post("/user/profile/:id/request", async (req, res) => {
     const [rows1] = await con.execute(
       `select * from Employee where Email="${id}"`
     );
-    let sql_statement1 = `insert into requests(UserRole,UserID,UserName,RequestDate,Information,AdminAction) values
-                     ("Employee","${rows1[0].EmpID}","${rows1[0].FirstName} ${rows1[0].LastName}",CURDATE(),
+    const [rows2] = await con.execute(
+      `select max(requestID) max_id from requests`
+    );
+    let sql_statement1 = `insert into requests values
+                     (${rows2[0].max_id + 1},"Employee","${rows1[0].EmpID}","${
+      rows1[0].FirstName
+    } ${rows1[0].LastName}",CURDATE(),
                      "${req.body.employee_request}","Pending")`;
     await con.execute(sql_statement1);
     return res.redirect(`/user/profile/${id}`);
@@ -731,13 +843,78 @@ app.post("/user/profile/:id/request", async (req, res) => {
     const [rows1] = await con.execute(
       `select * from Driver where Email="${id}"`
     );
-    let sql_statement1 = `insert into requests(UserRole,UserID,UserName,RequestDate,Information,AdminAction) values
-                     ("Driver","${rows1[0].DriverID}","${rows1[0].FirstName} ${rows1[0].LastName}",CURDATE(),
+    const [rows2] = await con.execute(
+      `select max(requestID) max_id from requests`
+    );
+    let sql_statement1 = `insert into requests values
+                     (${rows2[0].max_id + 1},"Driver","${rows1[0].DriverID}","${
+      rows1[0].FirstName
+    } ${rows1[0].LastName}",CURDATE(),
                      "${req.body.driver_request}","Pending")`;
     await con.execute(sql_statement1);
     return res.redirect(`/user/profile/${id}`);
   }
 });
+
+//discontinuing profile
+  
+app.delete("/user/profile/:id",async(req,res)=>{
+        const {id} = req.params;
+        const [account] = await con.execute(
+          `select * from login where Email="${id}"`
+        );
+        if (account[0].UserRole == "Student") {
+        await con.execute(`update student set Enddate=CURDATE() where Email="${id}"`)
+        await con.execute(`update login set UserStatus=0 where Email="${id}"`)
+        const [rows1] =await con.execute(`select FreeSlots from route where RouteID=(
+          select RouteID from driver where DriverID=(
+          select DriverID from student where Email="${id}"));`);
+        await con.execute(`update route set FreeSlots=${rows1[0].FreeSlots+1} 
+        where RouteID=(
+          select RouteID from driver where DriverID=(
+          select DriverID from student where Email="${id}"))`)
+        res.render("Users/logout.ejs")
+          }
+
+})
+
+
+
+//image upload to profiles
+
+app.post(
+  "/user/profile/:id/imageUpload",
+  upload.array("image"),
+  async (req, res) => {
+    const { id } = req.params;
+    const [admin_account] = await con.execute(
+      `select * from login where UserRole="Administrator"`
+    );
+    if (admin_account[0].Email == req.session.__id) {
+      req.flash("error", "Canot Add image From Admin Account");
+      return res.redirect(`/user/profile/${id}`);
+    }
+    const [account] = await con.execute(
+      `select * from login where Email="${id}"`
+    );
+    if (account[0].UserRole == "Student") {
+      await con.execute(
+        `update student set image_url="${req.files[0].path}", file_name="${req.files[0].filename}" where Email="${id}"`
+      );
+      return res.redirect(`/user/profile/${id}`);
+    } else if (account[0].UserRole == "Employee") {
+      await con.execute(
+        `update employee set image_url="${req.files[0].path}", file_name="${req.files[0].filename}" where Email="${id}"`
+      );
+      return res.redirect(`/user/profile/${id}`);
+    } else {
+      await con.execute(
+        `update driver set image_url="${req.files[0].path}", file_name="${req.files[0].filename}" where Email="${id}"`
+      );
+      return res.redirect(`/user/profile/${id}`);
+    }
+  }
+);
 
 app.get(
   "/user/profile/:id",
@@ -856,17 +1033,14 @@ app.get(
   })
 );
 
-app.get("/logout", (req, res) => {
+app.get("/logout", isLoggedIn, (req, res) => {
   req.session.__id = null;
   req.flash("success", "Logged Out Successfully");
-  res.redirect("/home");
+  res.redirect("/login");
 });
 app.post(
   "/login",
   catchAsync(async (req, res) => {
-    console.log(req.body.username);
-    console.log(req.body.password);
-    console.log(req.body.role);
     const Email = req.body.username;
     const AccPassword = req.body.password;
     const UserRole = req.body.role;
@@ -875,23 +1049,25 @@ app.post(
     );
     if (rows[0]) {
       const validPass = await bcrypt.compare(AccPassword, rows[0].AccPassword);
-      if (validPass && rows[0].UserRole == UserRole) {
+      if (validPass && rows[0].UserRole == UserRole && rows[0].UserStatus==1) {
         req.session.__id = Email;
         req.flash("success", "Logged in Successfully");
-        res.redirect("/home");
+        res.redirect("/login");
       } else {
         req.flash("error", "Incorrect Id or Password");
-        res.redirect("/home");
+        res.redirect("/login");
       }
     } else {
       req.flash("error", "Incorrect Id or Password");
-      res.redirect("/home");
+      res.redirect("/login");
     }
   })
 );
 
 app.get(
   "/user",
+  isLoggedIn,
+  isAdmin,
   catchAsync((req, res) => {
     const users = ["Abubakar", "emaan", "Umair"];
     throw new ExpressError();

@@ -1,4 +1,7 @@
 <% layout("layouts/boilerplate.ejs") %>
+<head>
+  </head>
+
   <body id="page-top" style="width:100%">
     <div id="wrapper" style="margin:15px;">
         <div class="text-end" id="content">
@@ -13,7 +16,7 @@
                         </div>
                         <div class="text-dark fw-bold h5 mb-0">
 
-                            <h5 name="earningmonth">9000 PKR</h5>
+                            <h5 name="earningmonth"><%=monthly_count%> PKR</h5>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -34,7 +37,7 @@
                           <h5>Earnings (annual)</h5>
                         </div>
                         <div class="text-dark fw-bold h5 mb-0">
-                          <span >50000 PKR</span>
+                          <span ><%=Annual_earnings%> PKR</span>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -55,7 +58,7 @@
                           <h5>New Users This Month</h5>
                         </div>
                         <div class="text-dark fw-bold h5 mb-0">
-                          <span>387894</span>
+                          <span><%=new_users%></span>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -76,7 +79,7 @@
                           <h5>Pending Requests</h5>
                         </div>
                         <div class="text-dark fw-bold h5 mb-0">
-                          <span>8</span>
+                          <span><%=pending_requests%></span>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -94,36 +97,16 @@
                     class="card-header d-flex justify-content-between align-items-center"
                   >
                     <h6 class="text-primary fw-bold m-0">Earnings Overview</h6>
-                    <div class="dropdown no-arrow">
-                      <button
-                        class="btn btn-link btn-sm dropdown-toggle"
-                        aria-expanded="false"
-                        data-bs-toggle="dropdown"
-                        type="button"
-                      >
-                        <i class="fas fa-ellipsis-v text-gray-400"></i>
-                      </button>
-                      <div
-                        class="dropdown-menu shadow dropdown-menu-end animated--fade-in"
-                      >
-                        <p class="text-center dropdown-header">
-                          dropdown header:
-                        </p>
-                        <a class="dropdown-item" href="#">&nbsp;Action</a
-                        ><a class="dropdown-item" href="#"
-                          >&nbsp;Another action</a
-                        >
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#"
-                          >&nbsp;Something else here</a
-                        >
-                      </div>
                     </div>
-                  </div>
                   <div class="card-body">
                     <div class="chart-area">
                       <canvas
-                        data-bss-chart='{"type":"line","data":{"labels":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"],"datasets":[{"label":"Earnings","fill":true,"data":["0","10000","5000","15000","10000","20000","15000","25000"],"backgroundColor":"rgba(78, 115, 223, 0.05)","borderColor":"rgba(78, 115, 223, 1)"}]},"options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"},"scales":{"xAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"],"drawOnChartArea":false},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}],"yAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"]},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}]}}}'
+                        data-bss-chart='{"type":"line",
+                        "data":{"labels":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"],
+                        "datasets":[{"label":"Earnings","fill":true,
+                        "data":["0","10000","5000","15000","10000","20000","15000","25000"],
+                        "backgroundColor":"rgba(78, 115, 223, 0.05)","borderColor":"rgba(78, 115, 223, 1)"}]},
+                        "options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"},"scales":{"xAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"],"drawOnChartArea":false},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}],"yAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"]},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}]}}}'
                       ></canvas>
                     </div>
                   </div>
@@ -139,19 +122,22 @@
                   <div class="card-body">
                     <div class="chart-area">
                       <canvas
-                        data-bss-chart='{"type":"doughnut","data":{"labels":["Direct","Social","Referral"],"datasets":[{"label":"","backgroundColor":["#4e73df","#1cc88a","#36b9cc"],"borderColor":["#ffffff","#ffffff","#ffffff"],"data":["50","30","15"]}]},"options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"}}}'
+                        data-bss-chart='{"type":"doughnut",
+                        "data":{"labels":["F11","Media Town","Bahria Town"],
+                        "datasets":[{"label":"","backgroundColor":["#4e73df","#1cc88a","#36b9cc"],"borderColor":["#ffffff","#ffffff","#ffffff"],
+                        "data":["50","30","15"]}]},"options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"}}}'
                       ></canvas>
                     </div>
                     <div class="text-center small mt-4">
                       <span class="me-2"
                         ><i class="fas fa-circle text-primary"></i
-                        >&nbsp;Direct</span
+                        >&nbsp;F11</span
                       ><span class="me-2"
                         ><i class="fas fa-circle text-success"></i
-                        >&nbsp;Social</span
+                        >&nbsp;Media Town</span
                       ><span class="me-2"
                         ><i class="fas fa-circle text-info"></i
-                        >&nbsp;Refferal</span
+                        >&nbsp;Bahria Town</span
                       >
                     </div>
                   </div>

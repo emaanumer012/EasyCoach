@@ -15,7 +15,7 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex flex-column align-items-center text-center">
-              <<% if(info.image_url) {%>
+              <% if(info.image_url) {%>
               <img
                 width="150"
                 height="160"
@@ -201,15 +201,38 @@
                 <hr />
                 <div class="row">
                   <div class="col-sm-12">
-                    <a
-                      class="btn btn-info"
-                      target="__blank"
-                      href="/user/profile"
-                      >Edit Profile</a
+                    <a href="" class="btn btn-warning  mr-5"  data-toggle='modal' data-target="#discontinue_model">Discontinue Travel</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="modal" tabindex="-1" id="discontinue_model" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Warning!</h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
                     >
-                    <a class="btn btn-info" target="__blank" href="/home"
-                      >Home Page</a
-                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      After confirmation, the login credentials for this account will be inaccessible.
+                    </p>
+                  </div>
+                  <div class="modal-footer row">
+                    <form id="dis_student_form" action="/user/profile/<%=id%>?_method=DELETE" method="POST" class="row g-3 needs-validation" novalidate>
+                      <button type="submit" form="dis_student_form" class="btn btn-primary">Confirm</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">
+                      Close
+                    </button>
+                  </form>
                   </div>
                 </div>
               </div>

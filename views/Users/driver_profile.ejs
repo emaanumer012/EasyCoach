@@ -1,234 +1,203 @@
 <% layout("layouts/boilerplate.ejs") %>
 
-<body>
-  <div class="container m-5">
-    <div class="main-body">
-      <div class="row gutters-sm">
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex flex-column align-items-center text-center">
-                <% if(Driver.image_url) {%>
-                <img
-                  width="150"
-                  height="160"
-                  class="rounded-circle"
-                  viewBox="0 0 16 16"
-                  src="<%=Driver.image_url%>"
-                  alt=""
-                />
-                <% }else{ %>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="150"
-                  height="160"
-                  fill="currentColor"
-                  class="rounded-circle"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"
-                  />
-                </svg>
-                <% } %>
-                <div class="mt-3">
-                  <h4><%=Driver.FirstName%> <%=Driver.LastName%></h4>
-                  <p class="text-secondary mb-1">Driver</p>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"
+></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="/js/front_js.js"></script>
 
-                  <form
-                    action="/user/profile/<%=id%>/imageUpload"
-                    id="image_upload_form"
-                    method="POST"
-                    novalidate
-                    class="needs-validation"
-                    enctype="multipart/form-data"
-                  >
-                    <input
-                      class="form-control"
-                      type="file"
-                      id="formFile"
-                      name="image"
-                    />
-                    <button
-                      class="btn btn-success"
-                      type="submit"
-                      form="image_upload_form"
-                    >
-                      Submit
-                    </button>
-                  </form>
-                </div>
+<div class="container m-5">
+  <div class="main-body">
+    <div class="row gutters-sm">
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              <% if(Driver.image_url) {%> 
+                <img width="150"
+                height="160" class="rounded-circle" viewBox="0 0 16 16" src="<%=Driver.image_url%>" alt="">
+                <% }else{ %> 
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="150"
+                height="160"
+                fill="currentColor"
+                class="rounded-circle"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"
+                />
+              </svg>
+              <% } %> 
+              <div class="mt-3">
+                <h4><%=Driver.FirstName%> <%=Driver.LastName%></h4>
+                <p class="text-secondary mb-1">Driver</p>
+                <form  action="/user/profile/<%=id%>/imageUpload"
+                  id="image_upload_form"
+                  method="POST"
+                  novalidate
+                  class="needs-validation" enctype="multipart/form-data" >
+                  <input class="form-control" type="file" id="formFile" name="image" >
+                <button
+                          class="btn btn-success"
+                          type="submit"
+                          form="image_upload_form"
+                        >
+                          Submit
+                        </button>
+              </form>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="card align-right" style="width: 41rem">
-          <div class="card-body">
-            <ul class="nav nav-tabs">
-              <li class="nav-item">
-                <a
-                  href="#personaldetails"
-                  id="personaldetails-tab"
-                  class="nav-link active"
-                  data-toggle="tab"
-                  >Personal Details</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  href="#payments"
-                  id="payments-tab"
-                  class="nav-link"
-                  data-toggle="tab"
-                  >Payments</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  href="#requests"
-                  id="requests-tab"
-                  class="nav-link"
-                  data-toggle="tab"
-                  >Requests</a
-                >
-              </li>
-            </ul>
-
-            <div class="tab-content">
-              <div
-                class="tab-pane fade show active"
-                id="personaldetails"
-                role="tabpanel"
+      <div class="card align-right" style="width: 41rem">
+        <div class="card-body">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a
+                href="#personaldetails"
+                id="personaldetails-tab"
+                class="nav-link active"
+                data-toggle="tab"
+                >Personal Details</a
               >
-                <div class="col-md-12 mt-4">
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Full Name</h6>
-                    </div>
+            </li>
+            <li class="nav-item">
+              <a
+                href="#payments"
+                id="payments-tab"
+                class="nav-link"
+                data-toggle="tab"
+                >Payments</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                href="#requests"
+                id="requests-tab"
+                class="nav-link"
+                data-toggle="tab"
+                >Requests</a
+              >
+            </li>
+          </ul>
 
-                    <div class="col-sm-9 text-secondary">
-                      <%=Driver.FirstName%> <%=Driver.LastName%>
-                    </div>
+          <div class="tab-content">
+            <div
+              class="tab-pane fade show active"
+              id="personaldetails"
+              role="tabpanel"
+            >
+              <div class="col-md-12 mt-4">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Full Name</h6>
                   </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">CNIC</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"><%=Driver.CNIC%></div>
+    
+                  <div class="col-sm-9 text-secondary"><%=Driver.FirstName%> <%=Driver.LastName%></div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">CNIC</h6>
                   </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Driver ID</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                      <%=Driver.DriverID%>
-                    </div>
+                  <div class="col-sm-9 text-secondary"><%=Driver.CNIC%></div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Driver ID</h6>
                   </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Email</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"><%=Driver.Email%></div>
+                  <div class="col-sm-9 text-secondary"><%=Driver.DriverID%></div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Email</h6>
                   </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Contact</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary"><%=Driver.Phone%></div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Address</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                      <%=Driver.Address%>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Address</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                      <%=Driver.RouteID%>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Vehicle</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                      <%=Driver.vehicleno%>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Timings</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                      <%=Route.ShiftTime%>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Salary</h6>
-                    </div>
-                    <% for(let salary of Dr_details){ %>
-                    <div class="col-sm-9 text-secondary">
-                      <%=salary.SalaryAmount%>
-                    </div>
-                    <% } %>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <a
-                        class="btn btn-info"
-                        target="__blank"
-                        href="/user/profile"
-                        >Edit Profile</a
-                      >
-                      <a class="btn btn-info" target="__blank" href="/home"
-                        >Home Page</a
-                      >
-                    </div>
+                  <div class="col-sm-9 text-secondary">
+                    <%=Driver.Email%>
                   </div>
                 </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Contact</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary"><%=Driver.Phone%></div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Address</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary"><%=Driver.Address%></div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Address</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary"><%=Driver.RouteID%></div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Vehicle</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary"><%=Driver.vehicleno%> </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Timings</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary"><%=Route.ShiftTime%></div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Salary</h6>
+                  </div>
+                  <% for(let salary of Dr_details){ %> 
+                  <div class="col-sm-9 text-secondary"><%=salary.SalaryAmount%> </div>
+                  <% } %> 
+                </div>
+                <hr />
+                
               </div>
+            </div>
 
-              <div class="tab-pane fade" id="payments" role="tabpanel">
-                <div class="card-body">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Driver ID</th>
-                        <th scope="col">Salary Amount</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% for(let salary of Dr_details){ %>
+            <div class="tab-pane fade" id="payments" role="tabpanel">
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Driver ID</th>
+                      <th scope="col">Salary Amount</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for(let salary of Dr_details){ %> 
                       <tr>
                         <td><%=salary.DriverID%></td>
                         <td><%=salary.SalaryAmount%></td>
                         <td><%=salary.PaidStatus%></td>
                       </tr>
-                      <% } %>
-                    </tbody>
-                  </table>
-                </div>
+                      <% } %> 
+                  </tbody>
+                </table>
               </div>
+            </div>
 
               <div class="tab-pane fade" id="requests" role="tabpanel">
+        
                 <div class="card-body">
                   <h5 class="card-title">Previous Requests</h5>
                   <table class="table">
@@ -240,17 +209,17 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <% for (let request of request_info){ %>
+                      <% for (let request of request_info){ %> 
                       <tr>
-                        <td><%=request.Information%></td>
-                        <td><%=request.RequestDate%></td>
+                        <td><%=request.Information%> </td>
+                        <td><%=request.RequestDate%> </td>
                         <td><%=request.AdminAction%></td>
                       </tr>
-                      <% } %>
+                      <% } %> 
                     </tbody>
                   </table>
-                </div>
-
+                </div>   
+                 
                 <div class="card-body">
                   <h5 class="card-title">Add Request</h5>
                   <table class="table">
@@ -263,48 +232,45 @@
                     <tbody>
                       <tr>
                         <form
-                          action="/user/profile/<%=id%>/request"
-                          id="driver_request_form"
-                          method="POST"
-                          novalidate
-                          class="needs-validation"
+                        action="/user/profile/<%=id%>/request"
+                        id="driver_request_form"
+                        method="POST"
+                        novalidate
+                        class="needs-validation"
+                      > 
+                      
+                      <td>
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="driver_request"
+                          id="driver_request"
+                          required
+                          placeholder="Request"
+                        />
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-success"
+                          type="submit"
+                          form="driver_request_form"
                         >
-                          <td>
-                            <input
-                              class="form-control"
-                              type="text"
-                              name="driver_request"
-                              id="driver_request"
-                              required
-                              placeholder="Request"
-                            />
-                          </td>
-                          <td>
-                            <button
-                              class="btn btn-success"
-                              type="submit"
-                              form="driver_request_form"
-                            >
-                              Add
-                            </button>
-                          </td>
-                        </form>
+                          Add
+                        </button>
+                      </td>
+                    
+                       </form>
+                        
+                        
                       </tr>
                     </tbody>
                   </table>
                 </div>
-              </div>
+         
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <script
-    src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"
-  ></script>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="/js/front_js.js"></script>
-</body>
+</div>
