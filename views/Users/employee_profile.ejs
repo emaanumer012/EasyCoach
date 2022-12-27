@@ -15,6 +15,16 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex flex-column align-items-center text-center">
+              <% if(Employee.image_url) {%>
+              <img
+                width="150"
+                height="160"
+                class="rounded-circle"
+                viewBox="0 0 16 16"
+                src="<%=Employee.image_url%>"
+                alt=""
+              />
+              <% }else{ %>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="150"
@@ -27,15 +37,32 @@
                   d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"
                 />
               </svg>
+              <% } %>
               <div class="mt-3">
                 <h4><%=Employee.FirstName%> <%=Employee.LastName%></h4>
                 <p class="text-secondary mb-1"><%=Employee.JobName%></p>
-                
-                <input
-                  class="form-control form-control-sm"
-                  id="formFileSm"
-                  type="file"
-                />
+                <form
+                  action="/user/profile/<%=id%>/imageUpload"
+                  id="image_upload_form"
+                  method="POST"
+                  novalidate
+                  class="needs-validation"
+                  enctype="multipart/form-data"
+                >
+                  <input
+                    class="form-control"
+                    type="file"
+                    id="formFile"
+                    name="image"
+                  />
+                  <button
+                    class="btn btn-success"
+                    type="submit"
+                    form="image_upload_form"
+                  >
+                    Submit
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -85,8 +112,10 @@
                   <div class="col-sm-3">
                     <h6 class="mb-0">Full Name</h6>
                   </div>
-    
-                  <div class="col-sm-9 text-secondary"><%=Employee.FirstName%> <%=Employee.LastName%></div>
+
+                  <div class="col-sm-9 text-secondary">
+                    <%=Employee.FirstName%> <%=Employee.LastName%>
+                  </div>
                 </div>
                 <hr />
                 <div class="row">
@@ -100,9 +129,7 @@
                   <div class="col-sm-3">
                     <h6 class="mb-0">Email</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
-                    <%=Employee.Email%>
-                  </div>
+                  <div class="col-sm-9 text-secondary"><%=Employee.Email%></div>
                 </div>
                 <hr />
                 <div class="row">
@@ -116,21 +143,28 @@
                   <div class="col-sm-3">
                     <h6 class="mb-0">Address</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary"><%=Employee.Address%></div>
+                  <div class="col-sm-9 text-secondary">
+                    <%=Employee.Address%>
+                  </div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Salary</h6>
                   </div>
-                  <% for(let salary of Emp_details){ %> 
-                  <div class="col-sm-9 text-secondary"><%=salary.SalaryAmount%> </div>
-                <% } %> 
+                  <% for(let salary of Emp_details){ %>
+                  <div class="col-sm-9 text-secondary">
+                    <%=salary.SalaryAmount%>
+                  </div>
+                  <% } %>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-12">
-                    <a class="btn btn-info" target="__blank" href="/user/profile"
+                    <a
+                      class="btn btn-info"
+                      target="__blank"
+                      href="/user/profile"
                       >Edit Profile</a
                     >
                     <a class="btn btn-info" target="__blank" href="/home"
@@ -152,20 +186,19 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% for(let salary of Emp_details){ %> 
-                      <tr>
-                        <td><%=salary.EmpID%></td>
-                        <td><%=salary.SalaryAmount%></td>
-                        <td><%=salary.PaidStatus%></td>
-                      </tr>
-                      <% } %> 
+                    <% for(let salary of Emp_details){ %>
+                    <tr>
+                      <td><%=salary.EmpID%></td>
+                      <td><%=salary.SalaryAmount%></td>
+                      <td><%=salary.PaidStatus%></td>
+                    </tr>
+                    <% } %>
                   </tbody>
                 </table>
               </div>
             </div>
 
             <div class="tab-pane fade" id="requests" role="tabpanel">
-        
               <div class="card-body">
                 <h5 class="card-title">Previous Requests</h5>
                 <table class="table">
@@ -177,17 +210,17 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% for (let request of request_info){ %> 
+                    <% for (let request of request_info){ %>
                     <tr>
-                      <td><%=request.Information%> </td>
-                      <td><%=request.RequestDate%> </td>
+                      <td><%=request.Information%></td>
+                      <td><%=request.RequestDate%></td>
                       <td><%=request.AdminAction%></td>
                     </tr>
-                    <% } %> 
+                    <% } %>
                   </tbody>
                 </table>
-              </div>   
-               
+              </div>
+
               <div class="card-body">
                 <h5 class="card-title">Add Request</h5>
                 <table class="table">
@@ -200,47 +233,37 @@
                   <tbody>
                     <tr>
                       <form
-                      action="/user/profile/<%=id%>/request"
-                      id="employee_request_form"
-                      method="POST"
-                      novalidate
-                      class="needs-validation"
-                    > 
-                    
-                    <td>
-                      <input
-                        class="form-control"
-                        type="text"
-                        name="employee_request"
-                        id="employee_request"
-                        required
-                        placeholder="Request"
-                      />
-                    </td>
-                    <td>
-                      <button
-                        class="btn btn-success"
-                        type="submit"
-                        form="employee_request_form"
+                        action="/user/profile/<%=id%>/request"
+                        id="employee_request_form"
+                        method="POST"
+                        novalidate
+                        class="needs-validation"
                       >
-                        Add
-                      </button>
-                    </td>
-                  
-                     </form>
-                      
-                      
+                        <td>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="employee_request"
+                            id="employee_request"
+                            required
+                            placeholder="Request"
+                          />
+                        </td>
+                        <td>
+                          <button
+                            class="btn btn-success"
+                            type="submit"
+                            form="employee_request_form"
+                          >
+                            Add
+                          </button>
+                        </td>
+                      </form>
                     </tr>
                   </tbody>
                 </table>
               </div>
-       
-          </div>
-
-
-
-
-
+            </div>
           </div>
         </div>
       </div>

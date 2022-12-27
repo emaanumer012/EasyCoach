@@ -1,21 +1,229 @@
 <% layout("layouts/boilerplate.ejs") %>
+  <body id="page-top" style="width:100%">
+    <div id="wrapper" style="margin:15px;">
+        <div class="text-end" id="content">
+            <div class="row" style="margin-top:20px;">
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-primary py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div class="text-uppercase text-primary fw-bold text-xs mb-1">
+                          <h5>Earnings (monthly)</h5>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
 
-    <div class="card mx-5 mb-5 mt-4" style="width: 80rem; background: linear-gradient(#e66465, #9198e5);">
-      <div class="card-body">
-        <h5 class="card-title">Operations</h5>
-        <div class="d-flex justify-content m-3">
-
-          <div class="card m-3" style="width: 18rem">
-            <a href="/login" class="btn"><div class="card-body">Login</div></a>
+                            <h5 name="earningmonth">9000 PKR</h5>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-success py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-success fw-bold text-xs mb-1"
+                        >
+                          <h5>Earnings (annual)</h5>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span >50000 PKR</span>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8 col-xl-3 mb-4">
+                <div class="card shadow border-start-info py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase fw-bold text-xs mb-1" style="color:purple"
+                        >
+                          <h5>New Users This Month</h5>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>387894</span>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-warning fw-bold text-xs mb-1"
+                        >
+                          <h5>Pending Requests</h5>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>8</span>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-7 col-xl-8">
+                <div class="card shadow mb-4">
+                  <div
+                    class="card-header d-flex justify-content-between align-items-center"
+                  >
+                    <h6 class="text-primary fw-bold m-0">Earnings Overview</h6>
+                    <div class="dropdown no-arrow">
+                      <button
+                        class="btn btn-link btn-sm dropdown-toggle"
+                        aria-expanded="false"
+                        data-bs-toggle="dropdown"
+                        type="button"
+                      >
+                        <i class="fas fa-ellipsis-v text-gray-400"></i>
+                      </button>
+                      <div
+                        class="dropdown-menu shadow dropdown-menu-end animated--fade-in"
+                      >
+                        <p class="text-center dropdown-header">
+                          dropdown header:
+                        </p>
+                        <a class="dropdown-item" href="#">&nbsp;Action</a
+                        ><a class="dropdown-item" href="#"
+                          >&nbsp;Another action</a
+                        >
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"
+                          >&nbsp;Something else here</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart-area">
+                      <canvas
+                        data-bss-chart='{"type":"line","data":{"labels":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"],"datasets":[{"label":"Earnings","fill":true,"data":["0","10000","5000","15000","10000","20000","15000","25000"],"backgroundColor":"rgba(78, 115, 223, 0.05)","borderColor":"rgba(78, 115, 223, 1)"}]},"options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"},"scales":{"xAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"],"drawOnChartArea":false},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}],"yAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"]},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}]}}}'
+                      ></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-5 col-xl-4">
+                <div class="card shadow mb-4">
+                  <div
+                    class="card-header d-flex justify-content-between align-items-center"
+                  >
+                    <h6 class="text-primary fw-bold m-0">Destinations Summary</h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart-area">
+                      <canvas
+                        data-bss-chart='{"type":"doughnut","data":{"labels":["Direct","Social","Referral"],"datasets":[{"label":"","backgroundColor":["#4e73df","#1cc88a","#36b9cc"],"borderColor":["#ffffff","#ffffff","#ffffff"],"data":["50","30","15"]}]},"options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"}}}'
+                      ></canvas>
+                    </div>
+                    <div class="text-center small mt-4">
+                      <span class="me-2"
+                        ><i class="fas fa-circle text-primary"></i
+                        >&nbsp;Direct</span
+                      ><span class="me-2"
+                        ><i class="fas fa-circle text-success"></i
+                        >&nbsp;Social</span
+                      ><span class="me-2"
+                        ><i class="fas fa-circle text-info"></i
+                        >&nbsp;Refferal</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div class="col-md-5 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title text-white">Todo</h4>
+                    <div class="add-items d-flex">
+                      <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
+                      <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn" id="add-task">Add</button>
+                    </div>
+                    <div class="list-wrapper">
+                      <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+                        <li>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="checkbox" type="checkbox"> Hire another Accountant </label>
+                          </div>
+                          <i class="remove mdi mdi-close-circle-outline"></i>
+                        </li>
+                        <li class="completed">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="checkbox" type="checkbox" checked> Remove any route ID that includes Saddar </label>
+                          </div>
+                          <i class="remove mdi mdi-close-circle-outline"></i>
+                        </li>
+                        <li>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="checkbox" type="checkbox"> Create invoice </label>
+                          </div>
+                          <i class="remove mdi mdi-close-circle-outline"></i>
+                        </li>
+                        <li>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="checkbox" type="checkbox"> Print Statements </label>
+                          </div>
+                          <i class="remove mdi mdi-close-circle-outline"></i>
+                        </li>
+                        <li class="completed">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="checkbox" type="checkbox" checked> Prepare for presentation </label>
+                          </div>
+                          <i class="remove mdi mdi-close-circle-outline"></i>
+                        </li>
+                        <li>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="checkbox" type="checkbox"> Adjust room in routes to add Wah Cantt </label>
+                          </div>
+                          <i class="remove mdi mdi-close-circle-outline"></i>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card m-3" style="width: 18rem">
-            <a href="/register" class="btn"><div class="card-body">Register</div></a>
-          </div>
-
-        
         </div>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+      </div>
       </div>
     </div>
+  </body>
+</html>
+
 
 

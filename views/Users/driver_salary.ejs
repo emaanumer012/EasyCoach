@@ -1,45 +1,49 @@
 <% layout("layouts/boilerplate.ejs") %>
+
 <div class="container-fluid" style="padding-top: 20px">
   <div class="col-sm-12" style="padding-top: 20px">
     <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">
-          <i class="mdi me-2 mdi-file-multiple"></i> Driver Salary List
-        </h4>
-        <div class="table-responsive">
-          <table class="table user-table">
-            <thead>
-              <tr>
-                <th class="border-top-0">Driver ID</th>
-                <th class="border-top-0">Name</th>
-                <th class="border-top-0">Vehicle No</th>
-                <th class="border-top-0">Phone</th>
-                <th class="border-top-0">Salary</th>
-                <th class="border-top-0">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% rows.forEach(row => { %>
-              <tr>
-                <td><%=row.DriverID%></td>
-                <td><%=row.FirstName%><%=" "%><%=row.LastName%></td>
-                <td><%=row.vehicleno%></td>
-                <td><%=row.Phone%></td>
-                <td><%=row.SalaryAmount%></td>
-                <td>
-                  <%=row.PaidStatus%>
-                </td>
-                <td>
-                  <a
-                    href="/driver/salary/<%=row.DriverID%>/Paid"
-                    class="btn btn-success d-none d-md-inline-block btn-sm text-white"
-                    >Set as Paid</a
-                  >
-                </td>
-                <% }) %>
-              </tr>
-            </tbody>
-          </table>
+      <div class="card shadow">
+        <div class="card-body">
+          <h4 class="card-title">
+            <i class="mdi me-2 mdi-file-multiple"></i> Driver Salary List
+          </h4>
+          <div class="table-responsive">
+            <table class="table user-table">
+              <thead>
+                <tr>
+                  <th class="border-top-0">Challan Number</th>
+                  <th class="border-top-0">Name</th>
+                  <th class="border-top-0">Driver ID</th>
+                  <th class="border-top-0">Due Date</th>
+                  <th class="border-top-0">Amount Due</th>
+                  <th class="border-top-0">Status</th>
+                  <th class="border-top-0">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% rows.forEach(row => { %>
+                <tr>
+                  <td><%=row.ChallanNumber%></td>
+                  <td><%=row.FirstName%><%=" "%><%=row.LastName%></td>
+                  <td><%=row.DriverID%></td>
+                  <td><%=row.DueDate%></td>
+                  <td><%=row.SalaryAmount%></td>
+                  <td>
+                    <span class="badge bg-danger"><%=row.PaidStatus%></span>
+                  </td>
+                  <td>
+                    <a
+                      href="/driver/salary/<%=row.DriverID%>/Paid"
+                      class="btn btn-success d-none d-md-inline-block btn-sm text-white"
+                      >Set as Paid</a
+                    >
+                  </td>
+                  <% }) %>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

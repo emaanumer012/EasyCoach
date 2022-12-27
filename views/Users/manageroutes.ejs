@@ -1,30 +1,7 @@
 <% layout("layouts/boilerplate.ejs") %>
 
 <head>
-  <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans"
-  />
-  <link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  />
-  <link
-    rel="stylesheet"
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  />
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
   <style>
     body {
       color: #404e67;
@@ -111,7 +88,7 @@
       display: none;
     }
   </style>
-  <script>
+   <script>
     $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
       var actions = $("table td:last-child").html();
@@ -314,89 +291,86 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div
-          class="card shadow p-3 mb-5 bg-white rounded"
-          style="margin-top: 15px; margin-right: 10px; margin-left: -60px"
-        >
-          <div class="card-header text-left">Destination List</div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <div class="table-wrapper">
-                <table class="table table-bordered col-lg-8">
-                  <thead>
-                    <tr>
-                      <th>Destination Name</th>
-                      <th>Student Fare</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% for(let destination of destination_list){ %>
-                    <tr>
-                      <td><%=destination.DestName%></td>
-                      <td><%=destination.EquivDFare%></td>
-                      <td>
-                        <a href="/destination/<%=destination.DestName%>/edit">
-                          <i class="material-icons">&#xE254;</i>
-                        </a>
-                      <form
-                        id="delete_destination_<%=destination.DestName%>_form"
-                        action="/destination/<%=destination.DestName%>?_method=DELETE"
-                        method="POST">
-                          <a
-                            onclick="document.getElementById('delete_destination_<%=destination.DestName%>_form').submit();">
-                            <i class="material-icons">&#xE872;</i>
-                          </a>
-                        </form>
-                        </td>
-                      
-                    </tr>
-                    <% } %>
-                    <tr>
-                      <form
-                        action="/destinations/new"
-                        id="add_destination_form"
-                        method="POST"
-                        novalidate
-                        class="needs-validation"
-                      >
-                        <td>
-                          <input
-                            class="form-control"
-                            type="text"
-                            name="destination_name"
-                            id="destination_name"
-                            required
-                            placeholder="Destination Name"
-                          />
-                        </td>
-                        <td>
-                          <input
-                            class="form-control"
-                            type="number"
-                            name="student_fare"
-                            id="student_fare"
-                            required
-                            placeholder="Student Fare"
-                          />
-                        </td>
-                        <td>
-                          <button
-                            class="btn btn-success"
-                            type="submit"
-                            form="add_destination_form"
-                          >
-                            Add
-                          </button>
-                        </td>
-                      </form>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+      <div class="col-sm-4" style="margin-left:-50px;">
+        <div class="container-fluid mt-3">
+          <div class="card shadow">
+        <div class="card-header py-3">
+          <h5 class="m-0">Destination <b>List</b></h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-responsive">
+            <thead>
+              <tr>
+                <th>Destination Name</th>
+                <th>Student Fare</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let destination of destination_list){ %>
+              <tr>
+                <td><%=destination.DestName%></td>
+                <td><%=destination.EquivDFare%></td>
+                <td>
+                  <a href="/destination/<%=destination.DestName%>/edit">
+                    <i class="material-icons">&#xE254;</i>
+                  </a>
+                  <form
+                    id="delete_destination_<%=destination.DestName%>_form"
+                    action="/destination/<%=destination.DestName%>?_method=DELETE"
+                    method="POST"
+                  >
+                    <a
+                      onclick="document.getElementById('delete_destination_<%=destination.DestName%>_form').submit();"
+                    >
+                      <i class="material-icons">&#xE872;</i>
+                    </a>
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+              <tr>
+                <form
+                  action="/destinations/new"
+                  id="add_destination_form"
+                  method="POST"
+                  novalidate
+                  class="needs-validation"
+                >
+                  <td>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="destination_name"
+                      id="destination_name"
+                      required
+                      placeholder="Destination Name"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="form-control"
+                      type="number"
+                      name="student_fare"
+                      id="student_fare"
+                      required
+                      placeholder="Student Fare"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-success"
+                      type="submit"
+                      form="add_destination_form"
+                    >
+                      Add
+                    </button>
+                  </td>
+                </form>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         </div>
       </div>
     </div>

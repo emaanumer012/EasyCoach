@@ -1,78 +1,83 @@
 <% layout("layouts/boilerplate.ejs") %>
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
-</head>
 
-<body>
-  <div
-    class="card"
-    style="margin-top: 40px; margin-left: 20px; margin-right: 20px"
-  >
-    <div class="card shadow">
-      <h5
-        class="card-title text-nowrap text-capitalize mb-0 col-sm-4 text-muted"
-        style="margin-top: 20px; margin-bottom: 0px"
-      >
-        Search Employee Profiles
-      </h5>
-      <div class="input-group input-group-sm w-auto justify-content-end">
-        <form action="/searchemployees">
-          <input
-            class="form-control form-control"
-            type="search"
-            name="searchdata"
-            style="margin-left: -15px; padding-right: 10px; margin-right: 500px"
-            placeholder="Search..."
-          />
-        </form>
-      </div>
-      <div class="card-body">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Employee ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">CNIC</th>
-              <th scope="col">Contact Number</th>
-              <th scope="col">Job Name</th>
-              <th scope="col" class="text-center">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% rows.forEach(row => { %>
-            <tr>
-              <th scope="rownum">
-                <a
-                  href="/user/profile/<%=row.Email%>"
-                  style="position: absolute; display: block; width: 98%"
-                >
-                  <%=row.EmpID%></a
-                >
-              </th>
-              <td class="text-truncate" style="max-width: 200px">
-                <%=row.FirstName%><%= " "%><%=row.LastName%>
-              </td>
-              <td class="text-truncate" style="max-width: 200px">
-                <%=row.Email%>
-              </td>
-              <td><%=row.CNIC%></td>
-              <td><%=row.Phone%></td>
-              <td><%=row.JobName%></td>
-              <td class="text-center">
-                <% if (row.Enddate){ %> <%=row.Inactive%> <% } else { %>
-                <%=row.Active%> <% } %>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
+<body id="page-top">
+  <div id="wrapper">
+        <div class="container-fluid mt-3">
+          <div class="card shadow">
+            <div class="card-header py-3">
+              <h5 class="m-0">Employee <b>Information</b></h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <form action="/searchemployees">
+                    <input
+                      class="form-control form-control"
+                      type="search"
+                      name="searchdata"
+                      style="margin-left: 740px; padding-right: 10px; margin-right: 500px"
+                      placeholder="Search..."
+                    />
+                  </form>
+                </div>
+              </div>
+              <div
+                class="table table-hover table mt-2"
+                id="dataTable"
+                role="grid"
+                aria-describedby="dataTable_info"
+              >
+                <table class="table my-0" id="dataTable">
+                  <thead>
+                        <tr>
+                            <th scope="col">Employee ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">CNIC</th>
+                            <th scope="col">Contact Number</th>
+                            <th scope="col">Job Name</th>
+                            <th scope="col" class="text-center">End Date</th>
+                          </tr>
+                    </thead>
+                    <tbody>
+                        <% rows.forEach(row => { %>
+                        <tr>
+                          <th scope="rownum">
+                            <a
+                              href="/user/profile/<%=row.Email%>"
+                              style="position: absolute; display: block; width: 98%"
+                            >
+                              <%=row.EmpID%></a
+                            >
+                          </th>
+                          <td class="text-truncate" style="max-width: 200px">
+                            <%=row.FirstName%><%= " "%><%=row.LastName%>
+                          </td>
+                          <td class="text-truncate" style="max-width: 200px">
+                            <%=row.Email%>
+                          </td>
+                          <td><%=row.CNIC%></td>
+                          <td><%=row.Phone%></td>
+                          <td><%=row.JobName%></td>
+                          <td class="text-center">
+                            <%row.Enddate %>
+                          </td>
+                        </tr>
+                        <% }) %>
+                      </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"
+      ><i class="fas fa-angle-up"></i
+    ></a>
 
+  </div>
   <div style="margin: 20px">
     <a
       href="/register"
@@ -82,4 +87,7 @@
       Register an Employee
     </a>
   </div>
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+  <script src="assets/js/bs-init.js"></script>
+  <script src="assets/js/theme.js"></script>
 </body>

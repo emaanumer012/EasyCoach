@@ -1,111 +1,141 @@
 <% layout("layouts/boilerplate.ejs") %>
-
-<head>
-  <meta charset="utf-8" />
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
-</head>
-
-<body>
-  <div
-    class="card"
-    style="margin-top: 40px; margin-left: 20px; margin-right: 20px"
-  >
-    <div class="card shadow">
-      <h5
-        class="card-title text-nowrap text-capitalize mb-0 col-sm-4 text-muted"
-        style="margin-top: 20px; margin-bottom: 0px"
-      >
-      Vehicle Details
-      </h5>
-      
-      <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Vehicle Plate Number</th>
-              <th scope="col">Number of Seats</th>
-              <th scope="col">Color</th>
-              <th scope="col">Model</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for(let row of rows) { %>
-            <tr>
-              <td><%=row.VehicleNo%></td>
-              <td><%=row.NumOfSeats%></td>
-              <td><%=row.Color%></td>
-              <td><%=row.Model%></td>
-              
-              <td><form
-                id="delete_vehicle_<%=row.VehicleNo%>_form"
-                action="/vehicle/<%=row.VehicleNo%>?_method=DELETE"
-                method="POST">
-                  <a
-                    onclick="document.getElementById('delete_vehicle_<%=row.VehicleNo%>_form').submit();">
-                    <i class="material-icons">&#xE872;</i>
-                  </a>
-                </form></td>
-            </tr>
-            <% } %>
-            <tr>
-              
-<form action="/vehicle/new" id="vehicle_register" method="POST"  novalidate class="needs-validation">
-     <td><input
-      class="form-control"
-      type="text"
-      id="vehicle_no"
-      name="vehicle_no"
-      placeholder="Vehicle No"
-      required
-    />
-  </td>
-    
-  <td>
-    <input
-      class="form-control"
-      type="number"
-      id="total_seats"
-      name="total_seats"
-      placeholder="Seats"
-      required
-    />
-  </td>
-<td>
-  <input
-    class="form-control"
-    type="text"
-    id="color"
-    name="color"
-    placeholder="Color"
-    required
-  /></td>
- 
-
-<td> <input
-  class="form-control"
-  type="text"
-  id="model"
-  name="model"
-  placeholder="Model"
-  required
-/>
-
-</td>
- 
-
-<td> 
-  <button class="btn btn-success" type="submit" form="vehicle_register">
-    Register
-  </button>
-</td>
-
-</form>
-            </tr>
-          </tbody>
-        </table>
+<body id="page-top">
+  <div id="wrapper">
+        <div class="container-fluid mt-3">
+          <div class="card shadow">
+            <div class="card-header py-3">
+                <h5 class="m-0">Vehicle <b>Details</b></h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 text-nowrap">
+                </div>
+                <div class="col-md-6">
+                  <form action="/searchvehicles">
+                    <input
+                      class="form-control form-control"
+                      type="search"
+                      name="searchdata"
+                      style="margin-left: -15px; padding-right: 10px; margin-right: 500px"
+                      placeholder="Search..."
+                    />
+                  </form>
+                </div>
+              </div>
+              <div
+                class="table table-hover table mt-2"
+                id="dataTable"
+                role="grid"
+                aria-describedby="dataTable_info"
+              >
+                <table class="table my-0" id="dataTable">
+                  <thead>
+                      <th scope="col">Vehicle Plate Number</th>
+                      <th scope="col">Number of Seats</th>
+                      <th scope="col">Color</th>
+                      <th scope="col">Model</th>
+                      <th>Disable Use</th>
+                    </thead>
+                    <tbody>
+                      <% for(let row of rows) { %>
+                      <tr>
+                        <td><%=row.VehicleNo%></td>
+                        <td><%=row.NumOfSeats%></td>
+                        <td><%=row.Color%></td>
+                        <td><%=row.Model%></td>
+          
+                        <td>
+                          <form
+                            id="delete_vehicle_<%=row.VehicleNo%>_form"
+                            action="/vehicle/<%=row.VehicleNo%>?_method=DELETE"
+                            method="POST"
+                          >
+                            <a
+                              onclick="document.getElementById('delete_vehicle_<%=row.VehicleNo%>_form').submit();"
+                            >
+                              <i class="material-icons">&#xE872;</i>
+                            </a>
+                          </form>
+                        </td>
+                      </tr>
+                      <% } %>
+                      <tr>
+                        <form
+                          action="/vehicle/new"
+                          id="vehicle_register"
+                          method="POST"
+                          novalidate
+                          class="needs-validation"
+                        >
+                          <td>
+                            <input
+                              class="form-control"
+                              type="text"
+                              id="vehicle_no"
+                              name="vehicle_no"
+                              placeholder="Vehicle No"
+                              required
+                            />
+                          </td>
+          
+                          <td>
+                            <input
+                              class="form-control"
+                              type="number"
+                              id="total_seats"
+                              name="total_seats"
+                              placeholder="Seats"
+                              required
+                            />
+                          </td>
+                          <td>
+                            <input
+                              class="form-control"
+                              type="text"
+                              id="color"
+                              name="color"
+                              placeholder="Color"
+                              required
+                            />
+                          </td>
+          
+                          <td>
+                            <input
+                              class="form-control"
+                              type="text"
+                              id="model"
+                              name="model"
+                              placeholder="Model"
+                              required
+                            />
+                          </td>
+          
+                          <td>
+                            <button
+                              class="btn btn-success"
+                              type="submit"
+                              form="vehicle_register"
+                            >
+                              Register
+                            </button>
+                          </td>
+                        </form>
+                      </tr>
+                    </tbody>
+                </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"
+      ><i class="fas fa-angle-up"></i
+    ></a>
+
   </div>
-
-
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+  <script src="assets/js/bs-init.js"></script>
+  <script src="assets/js/theme.js"></script>
 </body>
