@@ -17,11 +17,13 @@ const methodover = require("method-override");
 const flash = require("connect-flash");
 const session = require("express-session");
 const { isAdmin, isLoggedIn } = require("./middleware");
+const { chown } = require("fs");
 
 //Connection Info
 let con;
 const connect = async function () {
   con = await mysql.createConnection({
+   
     host: "localhost",
     user: "root",
     password: "@bubakar1243",
@@ -74,9 +76,8 @@ app.get("/login", (req, res) => {
 });
 app.get(
   "/home",
-  isLoggedIn,
-  isAdmin,
-  catchAsync(async (req, res) => {
+  
+  async (req, res) => {
     const value = await con.execute(
       `select SUM(Amount) AS SUMM from payment where MONTH(PaymentDate)= (MONTH(now())+ INTERVAL 1 MONTH) and YEAR(PaymentDate)=YEAR(now());`
     );
@@ -93,6 +94,15 @@ app.get(
     const [rows5] = await con.execute(
       `SELECT SUM(Amount) m_count FROM payment WHERE Year(PaymentDate)=Year(now()) GROUP BY MONTH(PaymentDate)`
     );
+    const [rows6] = await con.execute(`select * from destinations`)
+    let DName=[]
+    let EFare =[]
+    for (row of rows6){
+      DName.push(row.DestName)
+    }
+    for (let row of rows6){
+      EFare.push(row.EquivDFare)
+    }
 
     res.render("Home.ejs", {
       item: value,
@@ -101,30 +111,30 @@ app.get(
       pie: rows3[0],
       new_users: rows4[0].new_count,
       monthly_count: rows5[0].m_count,
+      DName,EFare
     });
   })
-);
+;
 
 //Handling Requests (Admin page)
 
 app.get(
   "/admin/requests",
-  isLoggedIn,
-  isAdmin,
-  catchAsync(async (req, res) => {
+ 
+  async (req, res) => {
     const [rows1] = await con.execute(
       `SELECT * from requests where AdminAction="Pending" order by RequestDate desc`
     );
     res.render("Users/admin_requests.ejs", { requests: rows1 });
   })
-);
+;
 
 // sending requests response to database
 
 app.get(
   "/admin/requests/:request_id/:response",
-  isLoggedIn,
-  isAdmin,
+  
+  
   async (req, res) => {
     const { request_id, response } = req.params;
     await con.execute(
@@ -138,8 +148,7 @@ app.get(
 
 app.get(
   "/register",
-  isLoggedIn,
-  isAdmin,
+  
   catchAsync(async (req, res) => {
     const [rows1] =
       await con.execute(`SELECT route.RouteID RouteID,route_destinations.DestName DestName FROM route
@@ -167,8 +176,7 @@ app.get(
 
 app.post(
   "/student/register",
-  isLoggedIn,
-  isAdmin,
+  
   catchAsync(async (req, res) => {
     const [rows1] = await con.execute(
       `select * from student where CmsID=${req.body.cms}`
@@ -228,8 +236,8 @@ app.post(
 
 app.post(
   "/student/register/get_timings",
-  isLoggedIn,
-  isAdmin,
+  
+  catchAsync(
   async (req, res) => {
     const rows =
       await con.execute(`select ShiftTime from route where RouteID in (
@@ -240,22 +248,23 @@ app.post(
       timings: rows,
     });
   }
-);
+));
 
 // student Invoice
 
-app.get("/student/invoice", isLoggedIn, isAdmin, async (req, res) => {
+app.get("/student/invoice", isLoggedIn, isAdmin,catchAsync( async (req, res) => {
   const [rows] = await con.execute(
     `SELECT * from payment_requests where AdminAction="Pending"`
   );
   res.render("Users/student_invoice.ejs", { rows });
-});
+}));
 
 //action on students payment details sent
 app.get(
   "/student/invoice/:p_request_id/:response",
   isLoggedIn,
   isAdmin,
+  catchAsync(
   async (req, res) => {
     const { p_request_id, response } = req.params;
     const [rows] = await con.execute(`select * from payment where ChallanNum=
@@ -280,14 +289,13 @@ app.get(
     req.flash("success", "Stauts set as Unpaid");
     res.redirect(`/student/invoice`);
   }
-);
+));
 
 // registering a driver
 
 app.post(
   "/driver/register",
-  isLoggedIn,
-  isAdmin,
+  
   catchAsync(async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, 12);
     const [rows1] = await con.execute(
@@ -330,8 +338,8 @@ app.post(
 
 app.post(
   "/driver/register/get_timings",
-  isLoggedIn,
-  isAdmin,
+  
+  catchAsync(
   async (req, res) => {
     const rows = await con.execute(
       `select ShiftTime from route where RouteID ="${req.body.route_id}"`
@@ -341,22 +349,23 @@ app.post(
       timings: rows,
     });
   }
-);
+));
 
 // Driver Salary
 
-app.get("/driver/salary", isLoggedIn, isAdmin, async (req, res) => {
+app.get("/driver/salary", isLoggedIn, isAdmin,catchAsync( async (req, res) => {
   const [rows] = await con.execute(
     `SELECT * FROM dsalary d JOIN driver dr USING (DriverID) where PaidStatus="Unpaid"`
   );
   res.render("Users/driver_salary.ejs", { rows });
-});
+}));
 
 //response on setting driver salary as paid
 app.get(
   "/driver/salary/:id/:response",
   isLoggedIn,
   isAdmin,
+  catchAsync(
   async (req, res) => {
     const { id, response } = req.params;
     await con.execute(
@@ -365,14 +374,13 @@ app.get(
     req.flash("success", "Set Paid Successfully");
     res.redirect("/driver/salary");
   }
-);
+));
 
 //registering an Employee
 
 app.post(
   "/employee/register",
-  isLoggedIn,
-  isAdmin,
+  
   catchAsync(async (req, res, next) => {
     const hash = await bcrypt.hash(req.body.password, 12);
     const [rows1] = await con.execute("select max(EmpID) max_id from employee");
@@ -411,25 +419,26 @@ app.post(
 
 //  employee salary
 
-app.get("/employee/salary", isLoggedIn, isAdmin, async (req, res) => {
+app.get("/employee/salary", isLoggedIn, isAdmin,catchAsync( async (req, res) => {
   const [rows] = await con.execute(
     `SELECT * FROM esalary e JOIN employee em USING (EmpID) where PaidStatus="Unpaid"`
   );
   res.render("Users/employee_salary.ejs", { rows });
-});
+}));
 
 //response on setting employee salary as paid
 app.get(
   "/employee/salary/:id/:response",
   isLoggedIn,
   isAdmin,
+  catchAsync(
   async (req, res) => {
     const { id, response } = req.params;
     await con.execute(`update esalary set PaidStatus="Paid" where EmpID=${id}`);
     req.flash("success", "Set Paid Successfully");
     res.redirect("/employee/salary");
   }
-);
+));
 
 //Manage Students
 app.get(
@@ -501,8 +510,7 @@ app.get(
 
 app.get(
   "/searchdrivers",
-  isLoggedIn,
-  isAdmin,
+  
   catchAsync(async (req, res) => {
     var searchdata = req.query.searchdata;
     var sql =
@@ -596,7 +604,7 @@ app.get(
 
 //Add new Destination
 
-app.post("/destinations/new", isLoggedIn, isAdmin, async (req, res) => {
+app.post("/destinations/new", catchAsync( async (req, res) => {
   const [rows1] = await con.execute(
     `select * from destinations where DestName="${req.body.destination_name}"`
   );
@@ -610,11 +618,11 @@ app.post("/destinations/new", isLoggedIn, isAdmin, async (req, res) => {
   await con.execute(sql_statement1);
   req.flash("success", "Added New Destination");
   res.redirect("/routes/manage");
-});
+}));
 
 //Render Edit Destination
 
-app.get("/destination/:id/edit", isLoggedIn, isAdmin, async (req, res) => {
+app.get("/destination/:id/edit", isLoggedIn, isAdmin,catchAsync( async (req, res) => {
   let destination_array = [];
   const [rows1] = await con.execute(`select * from destinations`);
   const [rows2] = await con.execute(
@@ -639,20 +647,20 @@ app.get("/destination/:id/edit", isLoggedIn, isAdmin, async (req, res) => {
     route_ids: rows2,
     destination_array,
   });
-});
+}));
 //Edit Destination
 
-app.put("/destination/:id", isLoggedIn, isAdmin, async (req, res) => {
+app.put("/destination/:id", catchAsync( async (req, res) => {
   const { id } = req.params;
   await con.execute(`Update destinations set EquivDFare=${req.body.student_fare}
   where DestName ="${id}"`);
   req.flash("success", "Destination Fare updated Successfully");
   res.redirect("/routes/manage");
-});
+}));
 
 //Delete Destination
 
-app.delete("/destination/:id", isLoggedIn, isAdmin, async (req, res) => {
+app.delete("/destination/:id", catchAsync( async (req, res) => {
   const { id } = req.params;
   const [rows1] = await con.execute(
     `SELECT distinct DestName FROM route_destinations;`
@@ -666,14 +674,12 @@ app.delete("/destination/:id", isLoggedIn, isAdmin, async (req, res) => {
   await con.execute(`Delete from destinations where DestName="${id}"`);
   req.flash("success", "Destination Deleted Successfully");
   res.redirect("/routes/manage");
-});
+}));
 
 //Add new Routes
 
 app.post(
   "/routes/new",
-  isLoggedIn,
-  isAdmin,
   catchAsync(async (req, res) => {
     const [rows1] = await con.execute(
       `select * from route where RouteID="${req.body.route_id}"`
@@ -714,7 +720,7 @@ app.post(
 
 //Delete Routes
 
-app.delete("/routes/:id", isLoggedIn, isAdmin, async (req, res) => {
+app.delete("/routes/:id", catchAsync( async (req, res) => {
   const { id } = req.params;
   const [rows1] = await con.execute(
     `select * from driver where RouteID="${id}"`
@@ -732,30 +738,36 @@ app.delete("/routes/:id", isLoggedIn, isAdmin, async (req, res) => {
   await con.execute(`Delete from route where RouteID="${id}"`);
   req.flash("success", "Route Deleted Successfully");
   res.redirect("/routes/manage");
-});
+}));
 
 
 
 //manage Vehicle
-app.get("/vehicle/manage", isLoggedIn, isAdmin, async (req, res) => {
+app.get("/vehicle/manage", isLoggedIn, isAdmin,catchAsync( async (req, res) => {
   const [rows] = await con.execute(
     `select * from vehicle where Enddate is Null`
   );
   res.render("Users/managevehicles.ejs", { rows });
-});
+}));
 
 //add new vehicle
-app.post("/vehicle/new", isLoggedIn, isAdmin, async (req, res) => {
+app.post("/vehicle/new", isLoggedIn, isAdmin,catchAsync( async (req, res) => {
+  const[rows] = await con.execute(`select * from vehicle where VehicleNo="${req.body.vehicle_no}"`)
+  if(rows[0]){
+    console.log("herreee")
+    req.flash("error","Vehicle with this id already exists")
+    return res.redirect("/vehicle/manage");
+  }
   const sql_statement1 =
     `INSERT INTO vehicle VALUES ` +
     `("${req.body.vehicle_no}", ${req.body.total_seats}, "${req.body.color}","${req.body.model}",null)`;
   await con.execute(sql_statement1);
   req.flash("success", "Registered Vehicle Successfully");
-  res.redirect("/vehicle/manage/");
-});
+  res.redirect("/vehicle/manage");
+}));
 
 //delete vehicle
-app.delete("/vehicle/:id", isLoggedIn, isAdmin, async (req, res) => {
+app.delete("/vehicle/:id", catchAsync( async (req, res) => {
   const { id } = req.params;
   const [rows] = await con.execute(`select * from driver where vehicleno="${id}"`);
   console.log(rows[0])
@@ -766,11 +778,11 @@ app.delete("/vehicle/:id", isLoggedIn, isAdmin, async (req, res) => {
   await con.execute(`Delete from vehicle where VehicleNo="${id}"`);
   req.flash("success", "vehicle Deleted Successfully");
   res.redirect("/vehicle/manage");
-});
+}));
 
 //taking payment details to database
 
-app.post("/user/profile/:id/payment", isLoggedIn, async (req, res) => {
+app.post("/user/profile/:id/payment",catchAsync( async (req, res) => {
   const { id } = req.params;
   const [admin_account] = await con.execute(
     `select * from login where UserRole="Administrator"`
@@ -795,11 +807,11 @@ app.post("/user/profile/:id/payment", isLoggedIn, async (req, res) => {
   await con.execute(sql_statement1);
   req.flash("success", "Added Request. Wait for response from Admin");
   res.redirect(`/user/profile/${id}`);
-});
+}));
 
 // taking requests to Database
 
-app.post("/user/profile/:id/request", isLoggedIn, async (req, res) => {
+app.post("/user/profile/:id/request", isLoggedIn,catchAsync( async (req, res) => {
   const { id } = req.params;
   const [admin_account] = await con.execute(
     `select * from login where UserRole="Administrator"`
@@ -854,11 +866,11 @@ app.post("/user/profile/:id/request", isLoggedIn, async (req, res) => {
     await con.execute(sql_statement1);
     return res.redirect(`/user/profile/${id}`);
   }
-});
+}));
 
 //discontinuing profile
   
-app.delete("/user/profile/:id",async(req,res)=>{
+app.delete("/user/profile/:id",catchAsync( async(req,res)=>{
         const {id} = req.params;
         const [account] = await con.execute(
           `select * from login where Email="${id}"`
@@ -873,10 +885,11 @@ app.delete("/user/profile/:id",async(req,res)=>{
         where RouteID=(
           select RouteID from driver where DriverID=(
           select DriverID from student where Email="${id}"))`)
-        res.render("Users/logout.ejs")
+        req.flash("success","Account Removed")
+        res.render("Users/login.ejs")
           }
 
-})
+}))
 
 
 
@@ -885,6 +898,7 @@ app.delete("/user/profile/:id",async(req,res)=>{
 app.post(
   "/user/profile/:id/imageUpload",
   upload.array("image"),
+  catchAsync(
   async (req, res) => {
     const { id } = req.params;
     const [admin_account] = await con.execute(
@@ -914,7 +928,7 @@ app.post(
       return res.redirect(`/user/profile/${id}`);
     }
   }
-);
+));
 
 app.get(
   "/user/profile/:id",
@@ -1040,7 +1054,7 @@ app.get("/logout", isLoggedIn, (req, res) => {
 });
 app.post(
   "/login",
-  catchAsync(async (req, res) => {
+  async (req, res) => {
     const Email = req.body.username;
     const AccPassword = req.body.password;
     const UserRole = req.body.role;
@@ -1062,7 +1076,7 @@ app.post(
       res.redirect("/login");
     }
   })
-);
+;
 
 app.get(
   "/user",
@@ -1080,7 +1094,7 @@ app.all("*", (req, res, next) => {
 app.use((err, req, res, next) => {
   const { statusCode = 500, message = "Something went wrong" } = err;
   res.status(statusCode);
-  res.render("error.ejs", { err });
+  return res.redirect("/home");
 });
 
 app.listen(3000, () => {
